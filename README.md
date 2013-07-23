@@ -1,6 +1,6 @@
-# ![Caveman icon](icon.png) Primal
+# ![Caveman icon](icon.png) Primal [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
 
-A **Pr**ocess **Ma**nagement **L**ibrary
+A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 ## Requirements
 
