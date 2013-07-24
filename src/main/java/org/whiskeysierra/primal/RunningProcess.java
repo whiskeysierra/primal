@@ -3,14 +3,19 @@ package org.whiskeysierra.primal;
 import com.google.common.io.InputSupplier;
 import com.google.common.io.OutputSupplier;
 
-import java.io.IOException;
+import javax.annotation.Nullable;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-public interface RunningProcess extends InputSupplier<InputStream>, OutputSupplier<OutputStream> {
+public interface RunningProcess extends Future<Integer>, InputSupplier<InputStream>, OutputSupplier<OutputStream> {
 
-    void await() throws IOException;
+    Integer get();
 
-    void cancel();
+    Integer get(long timeout, @Nullable TimeUnit unit) throws TimeoutException;
+
+    void await();
 
 }

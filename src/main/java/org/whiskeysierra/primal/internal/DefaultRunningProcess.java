@@ -1,61 +1,24 @@
 package org.whiskeysierra.primal.internal;
 
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Charsets;
-import com.google.common.base.Joiner;
-import com.google.common.io.ByteStreams;
-import com.google.common.util.concurrent.Service;
 import org.whiskeysierra.primal.RunningProcess;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 final class DefaultRunningProcess implements RunningProcess {
 
-    private static final CharMatcher LINE_BREAKS = CharMatcher.anyOf("\r\n");
-
     private final Process process;
-    private final String command;
+    private AtomicReference<State> state = new AtomicReference<>(State.NEW);
 
     public DefaultRunningProcess(ProcessBuilder builder) throws IOException {
+        this.state.compareAndSet(State.NEW, State.STARTING);
         this.process = builder.start();
-        this.command = Joiner.on(' ').join(builder.command());
-    }
-
-    private int waitFor() throws IOException {
-        try {
-            return process.waitFor();
-        } catch (InterruptedException e) {
-            throw new IOException(e);
-        }
-    }
-
-    private IOException fail(int exitValue) throws IOException {
-        final byte[] bytes = ByteStreams.toByteArray(process.getErrorStream());
-
-        final String message;
-
-        if (bytes.length == 0) {
-            message = String.format("%s failed with exit code %s", this, exitValue);
-        } else {
-            message = LINE_BREAKS.trimTrailingFrom(new String(bytes, Charsets.UTF_8));
-        }
-
-        return new IOException(message);
-    }
-
-    @Override
-    public void await() throws IOException {
-        try {
-            int exitValue = waitFor();
-            if (exitValue != 0) {
-                throw fail(exitValue);
-            }
-        } finally {
-            Thread.interrupted();
-            cleanup();
-        }
+        this.state.compareAndSet(State.STARTING, State.RUNNING);
     }
 
     @Override
@@ -69,30 +32,62 @@ final class DefaultRunningProcess implements RunningProcess {
     }
 
     @Override
-    public void cancel() {
-        cleanup();
-    }
-
-    private void cleanup() {
-        process.destroy();
-    }
-
-    private Service.State currentState() {
-        try {
-            switch (process.exitValue()) {
-                case 0:
-                    return Service.State.TERMINATED;
-                default:
-                    return Service.State.FAILED;
-            }
-        } catch (IllegalThreadStateException e) {
-            return Service.State.RUNNING;
+    public boolean cancel(boolean mayInterruptIfRunning) {
+        if (mayInterruptIfRunning && state.compareAndSet(State.RUNNING, State.CANCELLING)) {
+            process.destroy();
+            state.compareAndSet(State.CANCELLING, State.CANCELLED);
+            return true;
+        } else {
+            return false;
         }
     }
 
     @Override
-    public String toString() {
-        return command + " [" + currentState().name().toLowerCase() + "]";
+    public boolean isCancelled() {
+        return state.get() == State.CANCELLED;
+    }
+
+    @Override
+    public boolean isDone() {
+        return state.get() == State.DONE;
+    }
+
+    @Override
+    public Integer get() {
+        try {
+            final int exitValue = process.waitFor();
+
+            // TODO support configurable exit values
+            if (exitValue == 0) {
+                state.compareAndSet(State.RUNNING, State.DONE);
+                return 0;
+            } else {
+                state.compareAndSet(State.RUNNING, State.FAILED);
+                // TODO better exception
+                throw new ExecutionException(new IOException("Exit value was " + exitValue));
+            }
+
+        } catch (InterruptedException e) {
+            cancel(true);
+            throw SneakyThrows.sneakyThrow(e);
+        } catch (Exception e) {
+            state.set(State.FAILED);
+            throw SneakyThrows.sneakyThrow(e);
+        } finally {
+            process.destroy();
+            Thread.interrupted();
+        }
+    }
+
+    @Override
+    public Integer get(long timeout, @Nullable TimeUnit unit) {
+        // TODO implement timeout handling
+        return get();
+    }
+
+    @Override
+    public void await() {
+        get();
     }
 
 }
