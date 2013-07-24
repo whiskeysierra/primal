@@ -15,7 +15,8 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 ## Usage
 
 ```java
-final ManagedProcess managed = Primal.configure("/usr/bin/python", "-c", "print 'Hello from Python'");
+final ManagedProcess managed = Primal.configure("/usr/bin/python", 
+        "-c", "print 'Hello from Python'");
 final RunningProcess process = managed.start();
 
 // write to stdin
