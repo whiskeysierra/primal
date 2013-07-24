@@ -7,14 +7,29 @@ import org.whiskeysierra.primal.RunningProcess;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
+import java.nio.file.Path;
 import java.util.Map;
 
-final class DefaultManagedProcess implements ManagedProcess {
+public final class DefaultManagedProcess implements ManagedProcess {
 
-    private final ProcessBuilder builder;
+    private final ProcessBuilder builder = new ProcessBuilder();
 
-    public DefaultManagedProcess(ProcessBuilder builder) {
-        this.builder = builder;
+    public DefaultManagedProcess(Path executable) {
+
+    }
+
+    public DefaultManagedProcess(String command) {
+
+    }
+
+    @Override
+    public ManagedProcess parameterize(Object... arguments) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ManagedProcess parameterize(Iterable<?> arguments) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

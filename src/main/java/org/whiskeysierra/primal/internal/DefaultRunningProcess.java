@@ -4,7 +4,6 @@ import com.google.common.base.CharMatcher;
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 import com.google.common.util.concurrent.Service;
 import org.whiskeysierra.primal.RunningProcess;
 
@@ -75,9 +74,6 @@ final class DefaultRunningProcess implements RunningProcess {
     }
 
     private void cleanup() {
-        Closeables.closeQuietly(process.getInputStream());
-        Closeables.closeQuietly(process.getOutputStream());
-        Closeables.closeQuietly(process.getErrorStream());
         process.destroy();
     }
 

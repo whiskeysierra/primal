@@ -15,9 +15,11 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 ## Usage
 
 ```java
-final ManagedProcess managed = Primal.configure("/usr/bin/python", 
-        "-c", "print 'Hello from Python'");
-final RunningProcess process = managed.start();
+final Path python = Paths.get("/usr/bin/python");
+
+final ManagedProcess managed = Primal.prepare(python);
+managed.parameterize("-c", "print 'Hello from Python'");
+final RunningProcess process = managed.call();
 
 // write to stdin
 Files.copy(input, process);

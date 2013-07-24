@@ -6,6 +6,10 @@ import java.util.Map;
 
 public interface ManagedProcess {
 
+    ManagedProcess parameterize(Object... arguments);
+
+    ManagedProcess parameterize(Iterable<?> arguments);
+
     ManagedProcess in(File directory);
 
     ManagedProcess with(String variable, String value);
