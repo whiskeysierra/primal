@@ -78,6 +78,7 @@ final class DefaultManagedProcess implements ManagedProcess {
     @Override
     public ManagedProcess consume(Iterable<Input> inputs) {
         // TODO on unix, just redirect with Redirect.to(Paths.get("/dev/null").toFile())
+        // TODO check if NUL on windows works as well
         throw new UnsupportedOperationException();
     }
 
