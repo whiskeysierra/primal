@@ -3,6 +3,7 @@ package org.whiskeysierra.primal.internal;
 import org.whiskeysierra.primal.ManagedProcess;
 import org.whiskeysierra.primal.RunningProcess;
 import org.whiskeysierra.primal.Stream;
+import org.whiskeysierra.primal.Stream.Input;
 
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
@@ -58,7 +59,20 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
-    public ManagedProcess gobble(Stream stream) {
+    public ManagedProcess consume(Input input) {
+        // TODO delegate to consume(Collections.singleton(input))
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ManagedProcess consume(Input... inputs) {
+        // TODO delegate to consume(Arrays.asList(inputs))
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ManagedProcess consume(Iterable<Input> inputs) {
+        // TODO on unix, just redirect with Redirect.to(Paths.get("/dev/null").toFile())
         throw new UnsupportedOperationException();
     }
 
@@ -76,4 +90,5 @@ final class DefaultManagedProcess implements ManagedProcess {
     public RunningProcess call() throws IOException {
         throw new UnsupportedOperationException();
     }
+
 }

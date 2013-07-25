@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gag.annotation.remark.Booyah;
 import com.google.gag.annotation.remark.Hack;
 
+// TODO add test case
 final class SneakyThrows {
 
     /**

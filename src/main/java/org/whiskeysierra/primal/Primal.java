@@ -6,13 +6,20 @@ import org.whiskeysierra.primal.internal.DefaultProcessService;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.concurrent.Executor;
 
 public final class Primal {
 
+    // TODO support gobbling?
     private static final ProcessService SINGLETON = createService();
 
+    // TODO document that this won't support gobbling and timeouts
     public static ProcessService createService() {
         return new DefaultProcessService();
+    }
+
+    public static ProcessService createService(Executor executor) {
+        throw new UnsupportedOperationException();
     }
 
     public static void call(Path executable, Object... arguments) throws IOException {

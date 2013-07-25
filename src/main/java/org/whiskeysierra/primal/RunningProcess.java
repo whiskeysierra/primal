@@ -12,8 +12,10 @@ import java.util.concurrent.TimeoutException;
 
 public interface RunningProcess extends Future<Integer>, InputSupplier<InputStream>, OutputSupplier<OutputStream> {
 
+    @Override
     Integer get();
 
+    @Override
     Integer get(long timeout, @Nullable TimeUnit unit) throws TimeoutException;
 
     void await();
