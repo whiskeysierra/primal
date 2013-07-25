@@ -33,8 +33,8 @@ public final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
-    public ManagedProcess in(File directory) {
-        builder.directory(directory);
+    public ManagedProcess in(Path directory) {
+        builder.directory(directory.toFile());
         return this;
     }
 

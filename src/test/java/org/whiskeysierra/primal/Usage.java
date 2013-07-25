@@ -9,9 +9,23 @@ import java.nio.file.Paths;
 
 public final class Usage {
 
-    public static void test() throws IOException {
-        final File input = new File("input");
-        final File output = new File("output");
+    public void call() throws IOException {
+        Primal.call("ls", "-lh");
+    }
+
+    public void read() throws IOException {
+        String output = Primal.read("ls", "-lh");
+        // process output further
+    }
+
+    public void cwd() throws IOException {
+        final Path path = Paths.get("/path/to/directory");
+        Primal.prepare("ls", "-lh").in(path).call().await();
+    }
+
+    public void complete() throws IOException {
+        final File input = Paths.get("input").toFile();
+        final File output = Paths.get("output").toFile();
 
         final Path python = Paths.get("/usr/bin/python");
 
@@ -19,9 +33,8 @@ public final class Usage {
         managed.parameterize("-c", "print 'Hello from Python'");
         final RunningProcess process = managed.call();
 
-        // write to stdin
+        // read from stdin and write to stdout
         Files.copy(input, process);
-        // read from stdout
         Files.copy(process, output);
 
         process.await();

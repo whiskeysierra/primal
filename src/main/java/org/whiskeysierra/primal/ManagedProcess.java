@@ -1,7 +1,7 @@
 package org.whiskeysierra.primal;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Map;
 
 public interface ManagedProcess {
@@ -10,7 +10,7 @@ public interface ManagedProcess {
 
     ManagedProcess parameterize(Iterable<?> arguments);
 
-    ManagedProcess in(File directory);
+    ManagedProcess in(Path directory);
 
     ManagedProcess with(String variable, String value);
 
