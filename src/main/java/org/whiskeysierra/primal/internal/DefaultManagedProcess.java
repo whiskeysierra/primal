@@ -1,10 +1,9 @@
 package org.whiskeysierra.primal.internal;
 
-import com.google.common.base.Joiner;
 import org.whiskeysierra.primal.ManagedProcess;
 import org.whiskeysierra.primal.RunningProcess;
+import org.whiskeysierra.primal.Stream;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
@@ -12,18 +11,24 @@ import java.util.Map;
 
 final class DefaultManagedProcess implements ManagedProcess {
 
-    private final ProcessBuilder builder = new ProcessBuilder();
-
+    // TODO set mode to "executable"
     public DefaultManagedProcess(Path executable) {
-
+        throw new UnsupportedOperationException();
     }
 
+    // TODO set mode to "command"
     public DefaultManagedProcess(String command) {
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public String toString() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ManagedProcess parameterize(Object... arguments) {
+        // TODO delegate to parameterize(Arrays.asList(arguments))
         throw new UnsupportedOperationException();
     }
 
@@ -34,30 +39,41 @@ final class DefaultManagedProcess implements ManagedProcess {
 
     @Override
     public ManagedProcess in(Path directory) {
-        builder.directory(directory.toFile());
-        return this;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ManagedProcess with(String variable, String value) {
-        builder.environment().put(variable, value);
-        return this;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ManagedProcess with(Map<String, String> properties) {
-        builder.environment().putAll(properties);
-        return this;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public RunningProcess call() throws IOException{
-        return new DefaultRunningProcess(builder);
+    public ManagedProcess redirect(Stream stream, Redirect redirect) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public String toString() {
-        return Joiner.on(' ').join(builder.command()) + " [new]";
+    public ManagedProcess gobble(Stream stream) {
+        throw new UnsupportedOperationException();
     }
 
+    @Override
+    public ManagedProcess allow(int exitValue) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ManagedProcess allow(int... exitValues) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public RunningProcess call() throws IOException {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -9,22 +9,29 @@ import java.nio.file.Path;
 
 public final class Primal {
 
-    // Lazy Initialization Holder Class idiom
-    private static final class Lazy {
-        private static final ProcessService SINGLETON = createService();
-    }
+    private static final ProcessService SINGLETON = createService();
 
     public static ProcessService createService() {
         return new DefaultProcessService();
     }
 
     public static void call(Path executable, Object... arguments) throws IOException {
-        final ProcessService service = Lazy.SINGLETON;
+        final ProcessService service = SINGLETON;
         service.prepare(executable, arguments).call().await();
     }
 
     public static void call(String command, Object... arguments) throws IOException {
-        final ProcessService service = Lazy.SINGLETON;
+        final ProcessService service = SINGLETON;
+        service.prepare(command, arguments).call().await();
+    }
+
+    public static void call(Path executable, Iterable<?> arguments) throws IOException {
+        final ProcessService service = SINGLETON;
+        service.prepare(executable, arguments).call().await();
+    }
+
+    public static void call(String command, Iterable<?> arguments) throws IOException {
+        final ProcessService service = SINGLETON;
         service.prepare(command, arguments).call().await();
     }
 
@@ -37,13 +44,25 @@ public final class Primal {
     }
 
     public static String read(Path executable, Object... arguments) throws IOException {
-        final ProcessService service = Lazy.SINGLETON;
+        final ProcessService service = SINGLETON;
         final ManagedProcess managed = service.prepare(executable, arguments);
         return callAndCaptureOutput(managed);
     }
 
     public static String read(String command, Object... arguments) throws IOException {
-        final ProcessService service = Lazy.SINGLETON;
+        final ProcessService service = SINGLETON;
+        final ManagedProcess managed = service.prepare(command, arguments);
+        return callAndCaptureOutput(managed);
+    }
+
+    public static String read(Path executable, Iterable<?> arguments) throws IOException {
+        final ProcessService service = SINGLETON;
+        final ManagedProcess managed = service.prepare(executable, arguments);
+        return callAndCaptureOutput(managed);
+    }
+
+    public static String read(String command, Iterable<?> arguments) throws IOException {
+        final ProcessService service = SINGLETON;
         final ManagedProcess managed = service.prepare(command, arguments);
         return callAndCaptureOutput(managed);
     }

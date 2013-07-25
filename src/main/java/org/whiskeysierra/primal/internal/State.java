@@ -1,7 +1,7 @@
 package org.whiskeysierra.primal.internal;
 
 // TODO add javadoc
-public enum State {
+enum State {
 
     NEW,
 
@@ -16,6 +16,5 @@ public enum State {
     CANCELLED,
 
     FAILED
-
 
 }

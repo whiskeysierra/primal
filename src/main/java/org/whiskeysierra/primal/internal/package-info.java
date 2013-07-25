@@ -1,4 +1,3 @@
-@ParametersAreNonnullByDefault
-package org.whiskeysierra.primal.internal;
+@ParametersAreNonnullByDefault package org.whiskeysierra.primal.internal;
 
 import javax.annotation.ParametersAreNonnullByDefault;

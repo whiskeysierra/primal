@@ -2,6 +2,7 @@
 
 - command vs. executable
 - test suite
+  - skip not-implemented tests
 - cross platform testing
 - platform detection (important?)
   - architecture
@@ -20,6 +21,5 @@
 - Argument placeholder/substitution?
 - java.util.concurrent
   - Executor for Gobblers
-  - `RunningProcess` implements `Future`?
 - Allowed exit values
 - Timeouts/Watchdogs

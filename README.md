@@ -70,19 +70,10 @@ public void test() {
 
 ### Support for Dependency Injection
 
-### Guice
+### Guice or Dagger
 
-Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html):
-```java
-@Provides
-public ProcessService provideProcessService() {
-    return Primal.createService();
-}
-```
-
-### Dagger
-
-Inside your [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html):
+Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
+[@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
 ```java
 @Provides
 public ProcessService provideProcessService() {
