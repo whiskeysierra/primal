@@ -1,10 +1,5 @@
 # TODOs
 
-- Graceful degradation usages
-  - `Primal.call("ls", "-lh")` -> 0
-  - `Primal.read("ls", "-lh")` -> <output>
-  - `Primal.prepare("python", "manage.py", "test").in(project).call().await()` -> 0
-  - ...
 - command vs. executable
 - test suite
 - cross platform testing
@@ -12,10 +7,6 @@
   - architecture
   - os name
   - os version
-- Mockability
-  - AbstractManagedProcess (everything but `call()`)
-- Injectability
-  - `ProcessService Primal.createService()`
 - Debug mode
   - Command line output
   - Debug scripts?

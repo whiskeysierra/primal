@@ -19,17 +19,20 @@ public final class Usage {
     }
 
     public void cwd() throws IOException {
+        final ProcessService service = Primal.createService();
         final Path path = Paths.get("/path/to/directory");
-        Primal.prepare("ls", "-lh").in(path).call().await();
+        service.prepare("ls", "-lh").in(path).call().await();
     }
 
     public void complete() throws IOException {
+        final ProcessService service = Primal.createService();
+
         final File input = Paths.get("input").toFile();
         final File output = Paths.get("output").toFile();
 
         final Path python = Paths.get("/usr/bin/python");
 
-        final ManagedProcess managed = Primal.prepare(python);
+        final ManagedProcess managed = service.prepare(python);
         managed.parameterize("-c", "print 'Hello from Python'");
         final RunningProcess process = managed.call();
 

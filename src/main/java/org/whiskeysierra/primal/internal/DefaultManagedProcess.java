@@ -10,7 +10,7 @@ import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.util.Map;
 
-public final class DefaultManagedProcess implements ManagedProcess {
+final class DefaultManagedProcess implements ManagedProcess {
 
     private final ProcessBuilder builder = new ProcessBuilder();
 
