@@ -59,6 +59,11 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
+    public ManagedProcess redirectErrorStream() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public ManagedProcess consume(Input input) {
         // TODO delegate to consume(Collections.singleton(input))
         throw new UnsupportedOperationException();

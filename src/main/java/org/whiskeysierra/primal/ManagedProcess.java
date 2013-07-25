@@ -24,6 +24,8 @@ public interface ManagedProcess {
 
     ManagedProcess redirect(Stream stream, Redirect redirect);
 
+    ManagedProcess redirectErrorStream();
+
     ManagedProcess consume(Input input);
 
     ManagedProcess consume(Input... inputs);

@@ -1,6 +1,5 @@
 package org.whiskeysierra.primal;
 
-// TODO change toString to return "stdin", "stdout", "stderr"
 public interface Stream {
 
     public static final Output INPUT = Output.INPUT;
@@ -8,11 +7,37 @@ public interface Stream {
     public static final Input ERROR = Input.ERROR;
 
     public enum Input implements Stream {
-        OUTPUT, ERROR
+
+        OUTPUT("stdout"), ERROR("stderr");
+
+        private final String name;
+
+        Input(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
     }
 
     public enum Output implements Stream {
-        INPUT
+
+        INPUT("stdin");
+
+        private final String name;
+
+        Output(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+
     }
 
 }
