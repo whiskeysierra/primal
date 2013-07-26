@@ -20,6 +20,14 @@ dependencies {
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+sourceSets {
+    test {
+        java {
+            srcDirs  = ['src/spec/java', 'src/test/java']
+        }
+    }
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs = ['-proc:none', '-Werror', '-Xlint']
 }
