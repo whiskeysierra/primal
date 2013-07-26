@@ -1,7 +1,7 @@
-package org.whiskeysierra.primal.internal;
+package org.whiskeysierra.primal;
 
 // TODO add javadoc
-enum State {
+public enum State {
 
     NEW,
 

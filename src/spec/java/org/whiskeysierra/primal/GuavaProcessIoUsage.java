@@ -7,13 +7,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public final class ProcessServiceUsage {
+public final class GuavaProcessIoUsage {
 
     public void complete() throws IOException {
         final ProcessService service = Primal.createService();
 
         final File input = Paths.get("input").toFile();
         final File output = Paths.get("output").toFile();
+        final File error = Paths.get("error").toFile();
 
         final Path python = Paths.get("/usr/bin/python");
 
@@ -21,9 +22,14 @@ public final class ProcessServiceUsage {
         managed.parameterize("-c", "print 'Hello from Python'");
         final RunningProcess process = managed.call();
 
-        // read from stdin and write to stdout
+        // write to stdin
         Files.copy(input, process);
+
+        // read from stdout
         Files.copy(process, output);
+
+        // and stderr
+        Files.copy(process.getError(), error);
 
         process.await();
     }

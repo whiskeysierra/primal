@@ -1,6 +1,8 @@
 package org.whiskeysierra.primal.internal;
 
+import com.google.common.io.InputSupplier;
 import org.whiskeysierra.primal.RunningProcess;
+import org.whiskeysierra.primal.State;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -21,15 +23,6 @@ final class DefaultRunningProcess implements RunningProcess {
         this.state.compareAndSet(State.STARTING, State.RUNNING);
     }
 
-    @Override
-    public InputStream getInput() {
-        return process.getInputStream();
-    }
-
-    @Override
-    public OutputStream getOutput() {
-        return process.getOutputStream();
-    }
 
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
@@ -44,12 +37,47 @@ final class DefaultRunningProcess implements RunningProcess {
 
     @Override
     public boolean isCancelled() {
-        return state.get() == State.CANCELLED;
+        return currentState() == State.CANCELLED;
     }
 
     @Override
     public boolean isDone() {
-        return state.get() == State.DONE;
+        return currentState() == State.DONE;
+    }
+
+    @Override
+    public State currentState() {
+        return state.get();
+    }
+
+    @Override
+    public OutputStream getStandardInput() {
+        return process.getOutputStream();
+    }
+
+    @Override
+    public InputStream getStandardOutput() {
+        return process.getInputStream();
+    }
+
+    @Override
+    public InputStream getStandardError() {
+        return process.getErrorStream();
+    }
+
+    @Override
+    public OutputStream getOutput() throws IOException {
+        return process.getOutputStream();
+    }
+
+    @Override
+    public InputStream getInput() throws IOException {
+        return process.getInputStream();
+    }
+
+    @Override
+    public InputSupplier<InputStream> getError() {
+        return new ErrorStreamSupplier(process);
     }
 
     @Override

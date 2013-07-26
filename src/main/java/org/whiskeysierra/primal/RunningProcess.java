@@ -10,9 +10,18 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public interface RunningProcess extends Future<Integer>, InputSupplier<InputStream>, OutputSupplier<OutputStream> {
+public interface RunningProcess extends Future<Integer>,
+    InputSupplier<InputStream>, OutputSupplier<OutputStream> {
 
-    // TODO currentState()?, State public API?
+    State currentState();
+
+    OutputStream getStandardInput();
+
+    InputStream getStandardOutput();
+
+    InputStream getStandardError();
+
+    InputSupplier<InputStream> getError();
 
     @Override
     Integer get();
