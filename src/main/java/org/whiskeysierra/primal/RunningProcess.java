@@ -12,6 +12,8 @@ import java.util.concurrent.TimeoutException;
 
 public interface RunningProcess extends Future<Integer>, InputSupplier<InputStream>, OutputSupplier<OutputStream> {
 
+    // TODO currentState()?, State public API?
+
     @Override
     Integer get();
 
