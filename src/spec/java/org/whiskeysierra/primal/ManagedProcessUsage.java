@@ -1,6 +1,6 @@
 package org.whiskeysierra.primal;
 
-import org.whiskeysierra.primal.Stream.Input;
+import org.whiskeysierra.primal.Stream.Output;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public final class ManagedProcessUsage {
         managed.with("CLICOLOR", "0");
         managed.redirect(Stream.INPUT, Redirect.from(input));
         managed.redirectErrorStream();
-        managed.consume(Input.OUTPUT);
+        managed.consume(Output.OUTPUT);
         managed.allow(0, 1, 2, 3, 4);
     }
 

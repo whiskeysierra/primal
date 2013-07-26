@@ -1,6 +1,6 @@
 package org.whiskeysierra.primal;
 
-import org.whiskeysierra.primal.Stream.Input;
+import org.whiskeysierra.primal.Stream.Output;
 
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
@@ -26,11 +26,13 @@ public interface ManagedProcess {
 
     ManagedProcess redirectErrorStream();
 
-    ManagedProcess consume(Input input);
+    ManagedProcess noInput();
 
-    ManagedProcess consume(Input... inputs);
+    ManagedProcess consume(Output output);
 
-    ManagedProcess consume(Iterable<Input> inputs);
+    ManagedProcess consume(Output... outputs);
+
+    ManagedProcess consume(Iterable<Output> inputs);
 
     ManagedProcess allow(int exitValue);
 

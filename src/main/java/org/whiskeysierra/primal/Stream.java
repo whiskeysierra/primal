@@ -2,17 +2,17 @@ package org.whiskeysierra.primal;
 
 public interface Stream {
 
-    public static final Output INPUT = Output.INPUT;
-    public static final Input OUTPUT = Input.OUTPUT;
-    public static final Input ERROR = Input.ERROR;
+    public static final Input INPUT = Input.INPUT;
+    public static final Output OUTPUT = Output.OUTPUT;
+    public static final Output ERROR = Output.ERROR;
 
-    public enum Input implements Stream {
+    public enum Output implements Stream {
 
         OUTPUT("stdout"), ERROR("stderr");
 
         private final String name;
 
-        Input(String name) {
+        Output(String name) {
             this.name = name;
         }
 
@@ -23,13 +23,13 @@ public interface Stream {
 
     }
 
-    public enum Output implements Stream {
+    public enum Input implements Stream {
 
         INPUT("stdin");
 
         private final String name;
 
-        Output(String name) {
+        Input(String name) {
             this.name = name;
         }
 
