@@ -2,12 +2,7 @@
 
 - command vs. executable
 - test suite
-  - skip not-implemented tests
 - cross platform testing
-- platform detection (important?)
-  - architecture
-  - os name
-  - os version
 - Debug mode
   - Command line output
   - Debug scripts?
