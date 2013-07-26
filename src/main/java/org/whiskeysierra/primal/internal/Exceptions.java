@@ -4,8 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gag.annotation.remark.Booyah;
 import com.google.gag.annotation.remark.Hack;
 
-// TODO add test case
-final class SneakyThrows {
+final class Exceptions {
 
     /**
      * Throws any checked exception without the need to declare it in the
@@ -18,7 +17,7 @@ final class SneakyThrows {
     @Hack
     @Booyah
     public static RuntimeException sneakyThrow(Throwable throwable) {
-        SneakyThrows.<RuntimeException>doSneakyThrow(throwable);
+        Exceptions.<RuntimeException>doSneakyThrow(throwable);
         return null;
     }
 

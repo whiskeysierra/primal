@@ -69,10 +69,10 @@ final class DefaultRunningProcess implements RunningProcess {
 
         } catch (InterruptedException e) {
             cancel(true);
-            throw SneakyThrows.sneakyThrow(e);
+            throw Exceptions.sneakyThrow(e);
         } catch (Exception e) {
             state.set(State.FAILED);
-            throw SneakyThrows.sneakyThrow(e);
+            throw Exceptions.sneakyThrow(e);
         } finally {
             process.destroy();
             Thread.interrupted();
