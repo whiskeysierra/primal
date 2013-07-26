@@ -70,7 +70,7 @@ public void test() {
 
 ### Support for Dependency Injection
 
-### Guice or Dagger
+#### Guice or Dagger
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
