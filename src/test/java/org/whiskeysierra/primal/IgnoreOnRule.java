@@ -1,5 +1,6 @@
 package org.whiskeysierra.primal;
 
+import com.google.common.base.Throwables;
 import org.junit.Assume;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
@@ -34,7 +35,7 @@ public final class IgnoreOnRule implements TestRule {
             try {
                 base.evaluate();
             } catch (Throwable e) {
-                if (type.isInstance(e)) {
+                if (type.isInstance(Throwables.getRootCause(e))) {
                     Assume.assumeNoException(e);
                     return;
                 }
