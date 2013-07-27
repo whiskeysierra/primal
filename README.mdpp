@@ -1,0 +1,85 @@
+# ![Caveman icon](icon.png) Primal [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
+
+A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
+
+**This library is still under development**
+
+## Table of Contents
+!TOC
+
+## Requirements
+
+- Java 1.6 or higher
+- Guava 14.x
+
+## Installation
+
+### Gradle/Maven/Ivy
+
+### Jar
+
+## Usage
+
+[PrimalUsage.java](src/spec/java/org/whiskeysierra/process/PrimalUsage.java)
+```java
+!INCLUDE "src/spec/java/org/whiskeysierra/process/PrimalUsage.java"
+```
+
+[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
+```java
+!INCLUDE "src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java"
+```
+
+## Design Goals
+
+### Testability
+Dependency Injection FTW!!11!
+
+### Mockability
+API is pure interface-based...
+
+```java
+@Test
+public void test() {
+    final ProcessService service = EasyMock.createNiceMock(ProcessService.class);
+    final ManagedProcess managed = EasyMock.createNiceMock(ManagedProcess.class);
+    final RunningProcess process = EasyMock.createNiceMock(RunningProcess.class);
+
+    EasyMock.expect(service.prepare("/path/to/executable")).andReturn(managed);
+    EasyMock.expect(managed.call()).andReturn(process);
+
+    final InputStream stdout = createFakeStdout();
+    EasyMock.expect(process.getInput()).andReturn(stdout);
+    EasyMock.expect(process.waitFor()).andReturn(0);
+
+    EasyMock.replay(service, managed, process);
+
+    final ExampleService unit = new ExampleService(service);
+    unit.run();
+
+    EasyMock.verify(service, managed, process);
+}
+```
+
+### Support for Dependency Injection
+
+#### Guice or Dagger
+
+Inside your
+[guice]: https://code.google.com/p/google-guice/ "Guice"
+[Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
+[dagger]: https://github.com/square/dagger "Dagger"
+[@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
+```java
+@Provides
+public ProcessService provideProcessService() {
+    return Primal.createService();
+}
+```
+
+## References
+!REF
+
+## Attributions
+Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
+is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/)
