@@ -22,7 +22,6 @@ final class DefaultManagedProcess implements ManagedProcess {
 
     private final Executor executor;
     private final Redirector redirector;
-    private final ProcessFactory factory;
 
     private Path executable;
     private String command;
@@ -38,10 +37,9 @@ final class DefaultManagedProcess implements ManagedProcess {
     private int[] allowedExitValues = {0};
 
     @Inject
-    DefaultManagedProcess(Executor executor, Redirector redirector, ProcessFactory factory) {
+    DefaultManagedProcess(Executor executor, Redirector redirector) {
         this.executor = executor;
         this.redirector = redirector;
-        this.factory = factory;
         this.redirects = redirector.getDefaults();
     }
 
