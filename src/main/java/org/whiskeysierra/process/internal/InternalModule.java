@@ -1,19 +1,22 @@
 package org.whiskeysierra.process.internal;
 
-import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
-import org.whiskeysierra.process.Family;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.Os;
 import org.whiskeysierra.process.ProcessService;
+import org.whiskeysierra.process.Redirection;
+import org.whiskeysierra.process.Stream;
 
 import javax.inject.Singleton;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 @Module(injects = Root.class)
 public final class InternalModule {
 
+    // TODO in case we only have one stream gobbler, we might just use the current thread and
+    // get a away without one
     private final Executor executor;
 
     public InternalModule() {
@@ -22,12 +25,6 @@ public final class InternalModule {
 
     public InternalModule(Executor executor) {
         this.executor = executor;
-    }
-
-    @Provides
-    @Singleton
-    public Executor provideExecutor() {
-        return executor;
     }
 
     @Provides
@@ -49,30 +46,27 @@ public final class InternalModule {
 
     @Provides
     @Singleton
-    public Os provideOs() {
-        return Os.getCurrent();
+    @Default
+    public Map<Stream, Redirection> provideDefaultRedirections(Redirector redirector) {
+        return redirector.getDefaults();
     }
 
     @Provides
     @Singleton
-    public Processor provideProcessor(Os os, Lazy<UnixProcessor> unix, Lazy<Win9xProcessor> win9x,
-        Lazy<WinNTProcessor> nt) {
-
-        if (os.getFamilies().contains(Family.UNIX)) {
-            return unix.get();
-        } else if (os.getFamilies().contains(Family.WIN9X)) {
-            return win9x.get();
-        } else if (os.getFamilies().contains(Family.WINDOWS)) {
-            return nt.get();
-        } else {
-            // TODO handle more cases
-            throw new UnsupportedOperationException();
-        }
+    public Executor provideExecutor() {
+        return executor;
     }
 
     @Provides
-    public ProcessFactory provideProcessFactory(DefaultProcessFactory factory) {
-        return factory;
+    @Singleton
+    public ProcessExecutor provideProcessExecutor(DefaultProcessExecutor executor) {
+        return executor;
+    }
+
+    @Provides
+    @Singleton
+    public Os provideOs() {
+        return Os.getCurrent();
     }
 
 }

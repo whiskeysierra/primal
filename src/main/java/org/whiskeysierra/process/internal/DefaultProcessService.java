@@ -4,9 +4,9 @@ import com.google.common.base.Charsets;
 import com.google.common.io.ByteStreams;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.ProcessService;
+import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.RunningProcess;
 import org.whiskeysierra.process.Stream;
-import org.whiskeysierra.process.Stream.Output;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -23,9 +23,9 @@ final class DefaultProcessService implements ProcessService {
     }
 
     private void callAndAwait(ManagedProcess managed) throws IOException {
-        managed.noInput();
-        managed.consume(Stream.OUTPUT);
-        managed.consume(Stream.ERROR);
+        managed.redirect(Stream.INPUT, Redirection.NULL);
+        managed.redirect(Stream.OUTPUT, Redirection.NULL);
+        managed.redirect(Stream.ERROR, Redirection.NULL);
         managed.call().await();
     }
 
@@ -54,8 +54,8 @@ final class DefaultProcessService implements ProcessService {
     }
 
     private String callAndCaptureOutput(ManagedProcess managed) throws IOException {
-        managed.noInput();
-        managed.consume(Output.ERROR);
+        managed.redirect(Stream.INPUT, Redirection.NULL);
+        managed.redirect(Stream.ERROR, Redirection.NULL);
 
         final RunningProcess process = managed.call();
         // TODO handle possible exception?!

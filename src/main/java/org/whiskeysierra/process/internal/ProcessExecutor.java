@@ -3,8 +3,8 @@ package org.whiskeysierra.process.internal;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.RunningProcess;
 
-interface ProcessFactory {
+interface ProcessExecutor {
 
-    RunningProcess createFrom(ManagedProcess managed);
+    RunningProcess execute(AccessibleManagedProcess managed);
 
 }

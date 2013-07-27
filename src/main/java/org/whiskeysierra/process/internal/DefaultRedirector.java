@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
 import org.whiskeysierra.process.Family;
 import org.whiskeysierra.process.Os;
+import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.Stream;
 
 import javax.annotation.Nullable;
@@ -17,23 +18,23 @@ import java.util.Map;
 final class DefaultRedirector implements Redirector {
 
     // TODO test defaults
-    private final Map<Stream, Redirect> DEFAULTS = new Builder<Stream, Redirect>().
-        put(Stream.INPUT, Redirect.PIPE).
-        put(Stream.OUTPUT, Redirect.PIPE).
-        put(Stream.ERROR, Redirect.PIPE).
+    private final Map<Stream, Redirection> DEFAULTS = new Builder<Stream, Redirection>().
+        put(Stream.INPUT, Redirection.PIPE).
+        put(Stream.OUTPUT, Redirection.PIPE).
+        put(Stream.ERROR, Redirection.PIPE).
         build();
 
     private final Os os;
     private final Path nullDevice;
-    private final Redirect source;
-    private final Redirect target;
+    private final Redirect nullSource;
+    private final Redirect nullTarget;
 
     @Inject
     DefaultRedirector(Os os) {
         this.os = os;
         this.nullDevice = getNullDevice();
-        this.source = createNullSource();
-        this.target = createNullTarget();
+        this.nullSource = createNullSource();
+        this.nullTarget = createNullTarget();
     }
 
     @Nullable
@@ -82,18 +83,18 @@ final class DefaultRedirector implements Redirector {
     }
 
     @Override
-    public Map<Stream, Redirect> getDefaults() {
+    public Map<Stream, Redirection> getDefaults() {
         return Maps.newHashMap(DEFAULTS);
     }
 
     @Override
     public Redirect fromNullDevice() {
-        return source;
+        return nullSource;
     }
 
     @Override
     public Redirect toNullDevice() {
-        return target;
+        return nullTarget;
     }
 
 }
