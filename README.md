@@ -190,12 +190,12 @@ public void test() {
 <a name="guiceordagger"></a>
 
 #### 4.3.1\. Guice or Dagger
-
-Inside your
 [guice]: https://code.google.com/p/google-guice/ "Guice"
-[Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [dagger]: https://github.com/square/dagger "Dagger"
+
+Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
+
 ```java
 @Provides
 public ProcessService provideProcessService() {
