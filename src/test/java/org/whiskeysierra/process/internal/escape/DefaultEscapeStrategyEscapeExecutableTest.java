@@ -29,9 +29,8 @@ public final class DefaultEscapeStrategyEscapeExecutableTest {
     @Parameters
     public static Collection<Object[]> getExamples() {
         return Arrays.asList(new Object[][]{
-            // single path
             {Paths.get("/usr/bin/javac"), "/usr/bin/javac"},
-            {Paths.get("/usr/bin/javac"), "/usr/bin/javac"},
+            {Paths.get("/usr/bin/java"), "/usr/bin/java"},
             {Paths.get("/usr/bin/python"), "/usr/bin/python"},
             {Paths.get("/usr", "local", "bin", "node"), "/usr/local/bin/node"},
             {Paths.get("/opt/Adobe Reader/bin/acroread"), "/opt/Adobe Reader/bin/acroread"},

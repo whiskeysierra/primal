@@ -1,16 +1,28 @@
 package org.whiskeysierra.process.internal.escape;
 
-import com.google.common.base.Functions;
+import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.whiskeysierra.process.spi.EscapeStrategy;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 final class DefaultEscapeStrategy implements EscapeStrategy {
+
+    private final Function<Object,String> toString = new Function<Object, String>() {
+
+        @Nullable
+        @Override
+        public String apply(@Nullable Object input) {
+            return Objects.toString(input);
+        }
+
+    };
 
     @Inject
     DefaultEscapeStrategy() {
@@ -42,7 +54,7 @@ final class DefaultEscapeStrategy implements EscapeStrategy {
         // TODO escape/converting
         // TODO substitution?
 
-        return Lists.newArrayList(Iterables.transform(arguments, Functions.toStringFunction()));
+        return Lists.newArrayList(Iterables.transform(arguments, toString));
     }
 
 }
