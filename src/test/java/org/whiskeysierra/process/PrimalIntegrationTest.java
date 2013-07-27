@@ -47,19 +47,46 @@ public final class PrimalIntegrationTest {
 
         final ProcessService service = Primal.createService();
 
-        final Path input = Paths.get("src/test/resources/pg100.txt");
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
         final Path output = temp.newFile().toPath();
 
+        // TODO fix required toString here
         final ManagedProcess managed = service.prepare("cat", input.toAbsolutePath().toString());
 
+        managed.redirect(Stream.INPUT, Redirection.NULL);
         managed.redirect(Stream.OUTPUT, Redirection.to(output));
         managed.redirect(Stream.ERROR, Redirection.NULL);
 
         managed.call().await();
 
-        final byte[] written = Files.readAllBytes(output);
+        final byte[] actual = Files.readAllBytes(output);
+        final byte[] expected = Files.readAllBytes(input);
 
-        assertThat(written, equalTo(Files.readAllBytes(input)));
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void redirectInputFromAndOutputToFile() throws IOException {
+        // TODO introduce anntotation and rule for that
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
+        final ProcessService service = Primal.createService();
+
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
+        final Path output = temp.newFile().toPath();
+
+        final ManagedProcess managed = service.prepare("cat");
+
+        managed.redirect(Stream.INPUT, Redirection.from(input));
+        managed.redirect(Stream.OUTPUT, Redirection.to(output));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
+
+        managed.call().await();
+
+        final byte[] actual = Files.readAllBytes(output);
+        final byte[] expected = Files.readAllBytes(input);
+
+        assertThat(actual, equalTo(expected));
     }
 
 }
