@@ -17,30 +17,16 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 ## Usage
 
-```java
-Primal.call("brew", "update");
-```
 
-```java
-final String uptime = Primal.read("uptime");
-```
 
-```java
-final Path python = Paths.get("/path/to/executable");
+[PrimalUsage.java](src/spec/java/org/whiskeysierra/process/PrimalUsage.java)
 
-final ManagedProcess managed = Primal.prepare(python);
-managed.parameterize("--option", "some", "arguments");
-final RunningProcess process = managed.call();
-
-// write to stdin
-Files.copy(input, process.getOutput());
-// read from stdout
-Files.copy(process.getInput(), output);
-
-process.await();
-```
+[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
 
 ## Design Goals
+
+### Testability
+Dependency Injection FTW!!11!
 
 ### Mockability
 API is pure interface-based...
