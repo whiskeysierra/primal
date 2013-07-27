@@ -1,4 +1,4 @@
-package org.whiskeysierra.primal.internal.os;
+package org.whiskeysierra.primal;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;

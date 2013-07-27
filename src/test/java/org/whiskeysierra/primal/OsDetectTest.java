@@ -1,10 +1,12 @@
-package org.whiskeysierra.primal.internal.os;
+package org.whiskeysierra.primal;
 
 import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.whiskeysierra.primal.Family;
+import org.whiskeysierra.primal.Os;
 
 import java.util.Arrays;
 import java.util.Collection;

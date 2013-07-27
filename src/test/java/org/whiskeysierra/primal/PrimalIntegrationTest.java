@@ -3,15 +3,12 @@ package org.whiskeysierra.primal;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
-import org.whiskeysierra.primal.internal.os.Family;
-import org.whiskeysierra.primal.internal.os.Os;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 import static java.nio.file.Paths.get;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assume.assumeThat;

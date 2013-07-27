@@ -2,4 +2,4 @@
 
 set -e
 
-gradle clean build
+gradle build

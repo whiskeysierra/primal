@@ -1,4 +1,4 @@
-package org.whiskeysierra.primal.internal.os;
+package org.whiskeysierra.primal;
 
 public enum Family {
 

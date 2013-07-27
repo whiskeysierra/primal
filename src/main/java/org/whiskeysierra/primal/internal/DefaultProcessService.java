@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.concurrent.Executor;
 
 final class DefaultProcessService implements ProcessService {
 

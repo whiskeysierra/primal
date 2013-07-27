@@ -5,6 +5,7 @@ import org.whiskeysierra.primal.RunningProcess;
 import org.whiskeysierra.primal.State;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,9 +18,9 @@ final class DefaultRunningProcess implements RunningProcess {
     private final Process process;
     private AtomicReference<State> state = new AtomicReference<>(State.NEW);
 
-    public DefaultRunningProcess(ProcessBuilder builder) throws IOException {
+    public DefaultRunningProcess(Process process) {
         this.state.compareAndSet(State.NEW, State.STARTING);
-        this.process = builder.start();
+        this.process = process;
         this.state.compareAndSet(State.STARTING, State.RUNNING);
     }
 

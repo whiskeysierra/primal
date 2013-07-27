@@ -9,6 +9,7 @@ import org.whiskeysierra.primal.Stream;
 import org.whiskeysierra.primal.Stream.Output;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
@@ -21,6 +22,8 @@ import java.util.concurrent.Executor;
 final class DefaultManagedProcess implements ManagedProcess {
 
     private final Executor executor;
+    private final Redirector redirector;
+    private final ProcessFactory factory;
 
     private Path executable;
     private String command;
@@ -30,13 +33,17 @@ final class DefaultManagedProcess implements ManagedProcess {
 
     private final Map<String, String> environment = Maps.newHashMap(System.getenv());
 
-    private final Map<Stream, Redirect> redirects = Redirects.getDefaults();
+    private final Map<Stream, Redirect> redirects;
     private boolean redirectErrorStream;
     private boolean noInput;
+    private int[] allowedExitValues = {0};
 
     @Inject
-    DefaultManagedProcess(Executor executor) {
+    DefaultManagedProcess(Executor executor, Redirector redirector, ProcessFactory factory) {
         this.executor = executor;
+        this.redirector = redirector;
+        this.factory = factory;
+        this.redirects = redirector.getDefaults();
     }
 
     @Override
@@ -127,12 +134,11 @@ final class DefaultManagedProcess implements ManagedProcess {
     @Override
     public ManagedProcess consume(Iterable<Output> outputs) {
         // TODO null checks
-        // TODO on unix, just redirect with Redirect.to(Paths.get("/dev/null").toFile())
         // TODO check if NUL on windows works as well
         // TODO fall back to stream gobbling, if no null device is available
 
         for (Output output : outputs) {
-            final Redirect redirect = Redirects.toNullDevice();
+            final Redirect redirect = redirector.toNullDevice();
 
             if (redirect == null) {
                 // TODO use StreamGobbler
@@ -148,13 +154,16 @@ final class DefaultManagedProcess implements ManagedProcess {
 
     @Override
     public ManagedProcess allow(int exitValue) {
-        throw new UnsupportedOperationException();
+        this.allowedExitValues = new int[]{exitValue};
+        return this;
     }
 
+    // TODO specify defensive copy
     @Override
     public ManagedProcess allow(int... exitValues) {
         // TODO null checks
-        throw new UnsupportedOperationException();
+        this.allowedExitValues = Arrays.copyOf(exitValues, exitValues.length);
+        return this;
     }
 
     @Override

@@ -1,8 +1,8 @@
 package org.whiskeysierra.primal;
 
 import dagger.ObjectGraph;
-import org.whiskeysierra.primal.internal.Root;
 import org.whiskeysierra.primal.internal.InternalModule;
+import org.whiskeysierra.primal.internal.Root;
 
 import java.io.IOException;
 import java.nio.file.Path;

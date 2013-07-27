@@ -1,4 +1,7 @@
-package org.whiskeysierra.primal.internal.os;
+package org.whiskeysierra.primal;
+
+import org.whiskeysierra.primal.Family;
+import org.whiskeysierra.primal.Os;
 
 import java.util.Set;
 
