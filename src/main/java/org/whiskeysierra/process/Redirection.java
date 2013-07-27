@@ -47,7 +47,12 @@ public abstract class Redirection {
          */
         WRITE,
 
-        OUTPUT, /**
+        /**
+         *
+         */
+        OUTPUT,
+
+        /**
          * The type of redirects returned from
          * {@link Redirect#appendTo Redirect.appendTo(File)}.
          */

@@ -1,7 +1,5 @@
 package org.whiskeysierra.process;
 
-import org.whiskeysierra.process.Stream.Output;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;

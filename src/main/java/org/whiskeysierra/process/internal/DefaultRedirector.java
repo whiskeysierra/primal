@@ -9,6 +9,7 @@ import org.whiskeysierra.process.Stream;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,15 +26,15 @@ final class DefaultRedirector implements Redirector {
 
     private final Os os;
     private final Path nullDevice;
-    private final Redirection source;
-    private final Redirection target;
+    private final Redirect nullSource;
+    private final Redirect nullTarget;
 
     @Inject
     DefaultRedirector(Os os) {
         this.os = os;
         this.nullDevice = getNullDevice();
-        this.source = createNullSource();
-        this.target = createNullTarget();
+        this.nullSource = createNullSource();
+        this.nullTarget = createNullTarget();
     }
 
     @Nullable
@@ -65,19 +66,19 @@ final class DefaultRedirector implements Redirector {
         }
     }
 
-    private Redirection createNullSource() {
+    private Redirect createNullSource() {
         if (nullDevice == null) {
             return null;
         } else {
-            return Redirection.from(nullDevice);
+            return Redirect.from(nullDevice.toFile());
         }
     }
 
-    private Redirection createNullTarget() {
+    private Redirect createNullTarget() {
         if (nullDevice == null) {
             return null;
         } else {
-            return Redirection.to(nullDevice);
+            return Redirect.to(nullDevice.toFile());
         }
     }
 
@@ -87,13 +88,13 @@ final class DefaultRedirector implements Redirector {
     }
 
     @Override
-    public Redirection fromNullDevice() {
-        return source;
+    public Redirect fromNullDevice() {
+        return nullSource;
     }
 
     @Override
-    public Redirection toNullDevice() {
-        return target;
+    public Redirect toNullDevice() {
+        return nullTarget;
     }
 
 }

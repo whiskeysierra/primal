@@ -7,7 +7,6 @@ import org.whiskeysierra.process.ProcessService;
 import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.RunningProcess;
 import org.whiskeysierra.process.Stream;
-import org.whiskeysierra.process.Stream.Output;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

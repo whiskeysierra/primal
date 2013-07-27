@@ -5,6 +5,6 @@ import org.whiskeysierra.process.RunningProcess;
 
 interface ProcessExecutor {
 
-    RunningProcess execute(ManagedProcess managed);
+    RunningProcess execute(AccessibleManagedProcess managed);
 
 }

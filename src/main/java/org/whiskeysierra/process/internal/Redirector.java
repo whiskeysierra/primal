@@ -10,8 +10,8 @@ interface Redirector {
 
     public Map<Stream, Redirection> getDefaults();
 
-    public Redirection fromNullDevice();
+    public Redirect fromNullDevice();
 
-    public Redirection toNullDevice();
+    public Redirect toNullDevice();
 
 }

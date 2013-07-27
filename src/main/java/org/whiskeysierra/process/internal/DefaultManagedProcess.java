@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-final class DefaultManagedProcess implements ManagedProcess {
+final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedProcess {
 
     private final ProcessExecutor executor;
 
@@ -45,11 +45,21 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
+    public Path getExecutable() {
+        return executable;
+    }
+
+    @Override
     public ManagedProcess setCommand(String command) {
         // TODO null check
         this.executable = null;
         this.command = command;
         return this;
+    }
+
+    @Override
+    public String getCommand() {
+        return command;
     }
 
     @Override
@@ -67,10 +77,21 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
+    public List<Object> getArguments() {
+        return arguments;
+    }
+
+    @Override
     public ManagedProcess in(Path directory) {
         // TODO null check
         this.directory = directory;
         return this;
+    }
+
+
+    @Override
+    public Path getDirectory() {
+        return directory;
     }
 
     @Override
@@ -89,13 +110,23 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
+    public Map<String, String> getEnvironment() {
+        return environment;
+    }
+
+    @Override
     public ManagedProcess redirect(Stream stream, Redirection redirect) {
         // TODO null checks
         // TODO check arguments
-        this.redirections.put(stream, redirect);
+        redirections.put(stream, redirect);
         return this;
     }
 
+    @Override
+    public Redirection getRedirection(Stream stream) {
+        // TODO null check
+        return redirections.get(stream);
+    }
 
     @Override
     public ManagedProcess allow(int exitValue) {
@@ -113,13 +144,19 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
+    public int[] getAllowedExitValues() {
+        return allowedExitValues;
+    }
+
+    @Override
     public RunningProcess call() throws IOException {
         throw new UnsupportedOperationException();
+        //return executor.execute(this);
     }
 
     @Override
     public String toString() {
+        // TODO define a decent string representation
         throw new UnsupportedOperationException();
     }
-
 }

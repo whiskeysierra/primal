@@ -1,9 +1,7 @@
 package org.whiskeysierra.process.internal;
 
-import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
-import org.whiskeysierra.process.Family;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.Os;
 import org.whiskeysierra.process.ProcessService;
