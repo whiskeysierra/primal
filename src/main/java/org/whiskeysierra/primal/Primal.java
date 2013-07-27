@@ -1,9 +1,8 @@
 package org.whiskeysierra.primal;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.ByteStreams;
-import org.whiskeysierra.primal.Stream.Output;
-import org.whiskeysierra.primal.internal.DefaultProcessService;
+import dagger.ObjectGraph;
+import org.whiskeysierra.primal.internal.Root;
+import org.whiskeysierra.primal.internal.InternalModule;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,11 +13,11 @@ public final class Primal {
 
     // TODO document that this won't support gobbling and timeouts
     public static ProcessService createService() {
-        return new DefaultProcessService();
+        return ObjectGraph.create(new InternalModule()).get(Root.class).getService();
     }
 
     public static ProcessService createService(Executor executor) {
-        throw new UnsupportedOperationException();
+        return ObjectGraph.create(new InternalModule(executor)).get(Root.class).getService();
     }
 
     public static void call(Path executable, Object... arguments) throws IOException {

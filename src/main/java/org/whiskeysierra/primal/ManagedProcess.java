@@ -10,6 +10,10 @@ import java.util.Map;
 // TODO specify IOException as exception of choice?!
 public interface ManagedProcess {
 
+    ManagedProcess setExecutable(Path executable);
+
+    ManagedProcess setCommand(String command);
+
     // TODO specify defensive-copy?
     ManagedProcess parameterize(Object... arguments);
 
