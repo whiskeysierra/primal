@@ -8,6 +8,7 @@ import org.whiskeysierra.primal.RunningProcess;
 import org.whiskeysierra.primal.Stream;
 import org.whiskeysierra.primal.Stream.Output;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
@@ -15,11 +16,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 final class DefaultManagedProcess implements ManagedProcess {
 
-    private final Path executable;
-    private final String command;
+    private final Executor executor;
+
+    private Path executable;
+    private String command;
 
     private final List<Object> arguments = Lists.newArrayList();
     private Path directory;
@@ -30,14 +34,25 @@ final class DefaultManagedProcess implements ManagedProcess {
     private boolean redirectErrorStream;
     private boolean noInput;
 
-    public DefaultManagedProcess(Path executable) {
-        this.executable = executable;
-        this.command = null;
+    @Inject
+    DefaultManagedProcess(Executor executor) {
+        this.executor = executor;
     }
 
-    public DefaultManagedProcess(String command) {
+    @Override
+    public ManagedProcess setExecutable(Path executable) {
+        // TODO null check
+        this.executable = executable;
+        this.command = null;
+        return this;
+    }
+
+    @Override
+    public ManagedProcess setCommand(String command) {
+        // TODO null check
         this.executable = null;
         this.command = command;
+        return this;
     }
 
     @Override

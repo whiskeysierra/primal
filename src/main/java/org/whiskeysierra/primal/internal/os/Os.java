@@ -90,12 +90,7 @@ public final class Os {
         return Lazy.SINGLETON;
     }
 
-    /**
-     * Inspects os.name, os.arch and os.version!
-     *
-     * @param properties
-     * @return
-     */
+    // Inspects os.name, os.arch, os.version and path.separator!
     public static Os from(Properties properties) {
         return from(Maps.fromProperties(properties));
     }
