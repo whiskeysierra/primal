@@ -1,4 +1,4 @@
-package org.whiskeysierra.process.internal;
+package org.whiskeysierra.process.internal.manage;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -7,6 +7,9 @@ import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.RunningProcess;
 import org.whiskeysierra.process.Stream;
+import org.whiskeysierra.process.internal.Default;
+import org.whiskeysierra.process.spi.AccessibleManagedProcess;
+import org.whiskeysierra.process.spi.ProcessExecutor;
 
 import javax.inject.Inject;
 import java.io.IOException;

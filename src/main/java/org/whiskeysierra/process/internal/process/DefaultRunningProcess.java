@@ -1,8 +1,9 @@
-package org.whiskeysierra.process.internal;
+package org.whiskeysierra.process.internal.process;
 
 import com.google.common.io.InputSupplier;
 import org.whiskeysierra.process.RunningProcess;
 import org.whiskeysierra.process.State;
+import org.whiskeysierra.process.internal.Exceptions;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -120,6 +121,21 @@ final class DefaultRunningProcess implements RunningProcess {
     @Override
     public void await() {
         get();
+    }
+
+    static final class ErrorStreamSupplier implements InputSupplier<InputStream> {
+
+        private final Process process;
+
+        public ErrorStreamSupplier(Process process) {
+            this.process = process;
+        }
+
+        @Override
+        public InputStream getInput() throws IOException {
+            return process.getErrorStream();
+        }
+
     }
 
 }

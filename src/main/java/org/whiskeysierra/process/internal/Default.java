@@ -8,6 +8,6 @@ import java.lang.annotation.RetentionPolicy;
 @Qualifier
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@interface Default {
+public @interface Default {
 
 }

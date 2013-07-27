@@ -1,10 +1,10 @@
-package org.whiskeysierra.process.internal;
+package org.whiskeysierra.process.spi;
 
 import org.whiskeysierra.process.RunningProcess;
 
 import java.io.IOException;
 
-interface ProcessExecutor {
+public interface ProcessExecutor {
 
     RunningProcess execute(AccessibleManagedProcess managed) throws IOException;
 

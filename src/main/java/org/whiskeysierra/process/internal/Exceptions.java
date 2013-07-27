@@ -4,7 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.gag.annotation.remark.Booyah;
 import com.google.gag.annotation.remark.Hack;
 
-final class Exceptions {
+// TODO move to util package
+public final class Exceptions {
 
     /**
      * Throws any checked exception without the need to declare it in the

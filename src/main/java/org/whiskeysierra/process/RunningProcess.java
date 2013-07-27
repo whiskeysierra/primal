@@ -23,6 +23,7 @@ public interface RunningProcess extends Future<Integer>,
 
     InputSupplier<InputStream> getError();
 
+    // TODO sure we don't want the original throws clause here?
     @Override
     Integer get();
 

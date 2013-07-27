@@ -1,13 +1,14 @@
-package org.whiskeysierra.process.internal;
+package org.whiskeysierra.process.internal.execute;
 
 import com.google.common.io.ByteStreams;
+import org.whiskeysierra.process.spi.InputStreamHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-interface InputStreamHandler {
+final class InputStreamHandlers {
 
-    InputStreamHandler NOOP = new InputStreamHandler() {
+    public static final InputStreamHandler NOOP = new InputStreamHandler() {
 
         @Override
         public void handle(InputStream stream) {
@@ -16,7 +17,7 @@ interface InputStreamHandler {
 
     };
 
-    InputStreamHandler GOBBLE = new InputStreamHandler() {
+    public static final InputStreamHandler GOBBLE = new InputStreamHandler() {
 
         @Override
         public void handle(InputStream stream) throws IOException {
@@ -25,6 +26,8 @@ interface InputStreamHandler {
 
     };
 
-    void handle(InputStream stream) throws IOException;
+    private InputStreamHandlers() {
+
+    }
 
 }

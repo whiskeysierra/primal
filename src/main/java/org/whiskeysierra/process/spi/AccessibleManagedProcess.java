@@ -1,4 +1,4 @@
-package org.whiskeysierra.process.internal;
+package org.whiskeysierra.process.spi;
 
 import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.Stream;
@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-interface AccessibleManagedProcess {
+public interface AccessibleManagedProcess {
 
 
     Path getExecutable();
