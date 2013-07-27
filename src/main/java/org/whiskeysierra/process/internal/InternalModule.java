@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+// TODO split into subpackages and submodules
 @Module(injects = Root.class)
 public final class InternalModule {
 

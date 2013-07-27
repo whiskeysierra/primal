@@ -1,28 +1,31 @@
 package org.whiskeysierra.process.internal;
 
+import com.google.common.base.Objects;
+import com.google.common.base.Throwables;
 import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.Redirection.Type;
 import org.whiskeysierra.process.RunningProcess;
 import org.whiskeysierra.process.Stream;
 
 import javax.inject.Inject;
+import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 import java.util.concurrent.Executor;
 
 final class DefaultProcessExecutor implements ProcessExecutor {
 
-    private final Executor executor;
     private final Redirector redirector;
+    private final Executor executor;
 
     @Inject
-    DefaultProcessExecutor(Executor executor, Redirector redirector) {
-        this.executor = executor;
+    DefaultProcessExecutor(Redirector redirector, Executor executor) {
         this.redirector = redirector;
+        this.executor = executor;
     }
 
     @Override
-    public RunningProcess execute(AccessibleManagedProcess managed) {
+    public RunningProcess execute(AccessibleManagedProcess managed) throws IOException {
         final ProcessBuilder builder = new ProcessBuilder();
 
         // TODO escape managed.getExecutable/Command + managed.getArguments
@@ -85,10 +88,38 @@ final class DefaultProcessExecutor implements ProcessExecutor {
 
         // TODO throw meaningful exception when requesting a gobbler without thread pool
 
-        // TODO pass on to RunningProcess or whatever
-        managed.getAllowedExitValues();
+        final Process process = builder.start();
+        handleStreams(process, inputHandler, outputHandler, errorHandler);
 
-        throw new UnsupportedOperationException();
+
+        return new DefaultRunningProcess(process, managed.getAllowedExitValues());
+    }
+
+    private void handleStreams(Process process, OutputStreamHandler inputHandler, InputStreamHandler outputHandler,
+        InputStreamHandler errorHandler) throws IOException {
+
+        Exception thrown = null;
+
+        try {
+            inputHandler.handle(process.getOutputStream());
+        } catch (Exception e) {
+            thrown = null;
+        } finally {
+            try {
+                outputHandler.handle(process.getInputStream());
+            } catch (Exception e) {
+                thrown = Objects.firstNonNull(thrown, e);
+            } finally {
+                try {
+                    errorHandler.handle(process.getErrorStream());
+                } catch (Exception e) {
+                    thrown = Objects.firstNonNull(thrown, e);
+                }
+            }
+        }
+
+        Throwables.propagateIfInstanceOf(thrown, IOException.class);
+        throw Exceptions.sneakyThrow(thrown);
     }
 
     private OutputStreamHandler getInputHandler(AccessibleManagedProcess managed, ProcessBuilder builder) {
