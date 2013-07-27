@@ -15,7 +15,7 @@ public enum Family {
     UNIX("unix") {
 
         @Override
-        public boolean matches(String name, String pathSeparator) {
+        boolean matches(String name, String pathSeparator) {
             return pathSeparator.equals(":") &&
                 !OPENVMS.matches(name, pathSeparator) &&
                 (!MAC.matches(name, pathSeparator) || name.endsWith("x"));
@@ -26,7 +26,7 @@ public enum Family {
     WIN9X("win9x") {
 
         @Override
-        public boolean matches(String name, String pathSeparator) {
+        boolean matches(String name, String pathSeparator) {
             return WINDOWS.matches(name, pathSeparator) &&
                 (name.contains("95") || name.contains("98") || name.contains("me") || name.contains("ce"));
         }
@@ -38,7 +38,7 @@ public enum Family {
     Z_OS("z/os") {
 
         @Override
-        public boolean matches(String name, String pathSeparator) {
+        boolean matches(String name, String pathSeparator) {
             return name.contains(getName()) || name.contains("os/390");
         }
 
@@ -50,11 +50,11 @@ public enum Family {
         this.name = name;
     }
 
-    public boolean matches(String name, String pathSeparator) {
+    boolean matches(String name, String pathSeparator) {
         return name.contains(getName());
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
