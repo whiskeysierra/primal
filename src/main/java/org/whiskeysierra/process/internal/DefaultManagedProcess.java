@@ -4,24 +4,20 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.whiskeysierra.process.ManagedProcess;
+import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.RunningProcess;
 import org.whiskeysierra.process.Stream;
-import org.whiskeysierra.process.Stream.Output;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 final class DefaultManagedProcess implements ManagedProcess {
 
-    private final Executor executor;
-    private final Redirector redirector;
+    private final ProcessExecutor executor;
 
     private Path executable;
     private String command;
@@ -31,16 +27,13 @@ final class DefaultManagedProcess implements ManagedProcess {
 
     private final Map<String, String> environment = Maps.newHashMap(System.getenv());
 
-    private final Map<Stream, Redirect> redirects;
-    private boolean redirectErrorStream;
-    private boolean noInput;
+    private final Map<Stream, Redirection> redirections;
     private int[] allowedExitValues = {0};
 
     @Inject
-    DefaultManagedProcess(Executor executor, Redirector redirector) {
+    DefaultManagedProcess(ProcessExecutor executor, @Default Map<Stream, Redirection> defaults) {
         this.executor = executor;
-        this.redirector = redirector;
-        this.redirects = redirector.getDefaults();
+        this.redirections = defaults;
     }
 
     @Override
@@ -96,58 +89,13 @@ final class DefaultManagedProcess implements ManagedProcess {
     }
 
     @Override
-    public ManagedProcess redirect(Stream stream, Redirect redirect) {
+    public ManagedProcess redirect(Stream stream, Redirection redirect) {
         // TODO null checks
-        this.redirects.put(stream, redirect);
+        // TODO check arguments
+        this.redirections.put(stream, redirect);
         return this;
     }
 
-    // TODO specify semantics when redirecting manually using redirect(Stream.ERROR)
-    @Override
-    public ManagedProcess redirectErrorStream() {
-        this.redirectErrorStream = true;
-        return this;
-    }
-
-    @Override
-    public ManagedProcess noInput() {
-        // TODO alternatively, use Redirects.fromNullDevice(), if available
-        this.noInput = true;
-        return this;
-    }
-
-    @Override
-    public ManagedProcess consume(Output output) {
-        // TODO null checks
-        return consume(Collections.singleton(output));
-    }
-
-    @Override
-    public ManagedProcess consume(Output... outputs) {
-        // TODO null checks
-        return consume(Arrays.asList(outputs));
-    }
-
-    @Override
-    public ManagedProcess consume(Iterable<Output> outputs) {
-        // TODO null checks
-        // TODO check if NUL on windows works as well
-        // TODO fall back to stream gobbling, if no null device is available
-
-        for (Output output : outputs) {
-            final Redirect redirect = redirector.toNullDevice();
-
-            if (redirect == null) {
-                // TODO use StreamGobbler
-            } else {
-                redirects.put(output, redirect);
-            }
-
-            break;
-        }
-
-        return this;
-    }
 
     @Override
     public ManagedProcess allow(int exitValue) {
@@ -159,6 +107,7 @@ final class DefaultManagedProcess implements ManagedProcess {
     @Override
     public ManagedProcess allow(int... exitValues) {
         // TODO null checks
+        // TODO sort them, to support binary search (either here, or anywhere later down the call chain)
         this.allowedExitValues = Arrays.copyOf(exitValues, exitValues.length);
         return this;
     }

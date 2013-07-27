@@ -4,11 +4,11 @@ import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
 import org.whiskeysierra.process.Family;
 import org.whiskeysierra.process.Os;
+import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.Stream;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,16 +17,16 @@ import java.util.Map;
 final class DefaultRedirector implements Redirector {
 
     // TODO test defaults
-    private final Map<Stream, Redirect> DEFAULTS = new Builder<Stream, Redirect>().
-        put(Stream.INPUT, Redirect.PIPE).
-        put(Stream.OUTPUT, Redirect.PIPE).
-        put(Stream.ERROR, Redirect.PIPE).
+    private final Map<Stream, Redirection> DEFAULTS = new Builder<Stream, Redirection>().
+        put(Stream.INPUT, Redirection.PIPE).
+        put(Stream.OUTPUT, Redirection.PIPE).
+        put(Stream.ERROR, Redirection.PIPE).
         build();
 
     private final Os os;
     private final Path nullDevice;
-    private final Redirect source;
-    private final Redirect target;
+    private final Redirection source;
+    private final Redirection target;
 
     @Inject
     DefaultRedirector(Os os) {
@@ -65,34 +65,34 @@ final class DefaultRedirector implements Redirector {
         }
     }
 
-    private Redirect createNullSource() {
+    private Redirection createNullSource() {
         if (nullDevice == null) {
             return null;
         } else {
-            return Redirect.from(nullDevice.toFile());
+            return Redirection.from(nullDevice);
         }
     }
 
-    private Redirect createNullTarget() {
+    private Redirection createNullTarget() {
         if (nullDevice == null) {
             return null;
         } else {
-            return Redirect.to(nullDevice.toFile());
+            return Redirection.to(nullDevice);
         }
     }
 
     @Override
-    public Map<Stream, Redirect> getDefaults() {
+    public Map<Stream, Redirection> getDefaults() {
         return Maps.newHashMap(DEFAULTS);
     }
 
     @Override
-    public Redirect fromNullDevice() {
+    public Redirection fromNullDevice() {
         return source;
     }
 
     @Override
-    public Redirect toNullDevice() {
+    public Redirection toNullDevice() {
         return target;
     }
 

@@ -3,15 +3,16 @@ package org.whiskeysierra.process;
 import org.whiskeysierra.process.Stream.Output;
 
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
 import java.util.Map;
 
 // TODO specify IOException as exception of choice?!
 public interface ManagedProcess {
 
+    // TODO find better name
     ManagedProcess setExecutable(Path executable);
 
+    // TODO find better name
     ManagedProcess setCommand(String command);
 
     // TODO specify defensive-copy?
@@ -26,17 +27,8 @@ public interface ManagedProcess {
 
     ManagedProcess with(Map<String, String> properties);
 
-    ManagedProcess redirect(Stream stream, Redirect redirect);
-
-    ManagedProcess redirectErrorStream();
-
-    ManagedProcess noInput();
-
-    ManagedProcess consume(Output output);
-
-    ManagedProcess consume(Output... outputs);
-
-    ManagedProcess consume(Iterable<Output> inputs);
+    // TODO IAE on illegal combinations (input -> redirect to, output -> redirect from, output -> stderr)
+    ManagedProcess redirect(Stream stream, Redirection redirect);
 
     ManagedProcess allow(int exitValue);
 

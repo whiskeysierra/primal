@@ -1,42 +1,19 @@
 package org.whiskeysierra.process;
 
+import org.whiskeysierra.process.Streams.DefaultInput;
+import org.whiskeysierra.process.Streams.DefaultOutput;
+
 public interface Stream {
 
-    public static final Input INPUT = Input.INPUT;
-    public static final Output OUTPUT = Output.OUTPUT;
-    public static final Output ERROR = Output.ERROR;
+    public static final Input INPUT = DefaultInput.INPUT;
+    public static final Output OUTPUT = DefaultOutput.OUTPUT;
+    public static final Output ERROR = DefaultOutput.ERROR;
 
-    public enum Output implements Stream {
-
-        OUTPUT("stdout"), ERROR("stderr");
-
-        private final String name;
-
-        Output(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+    public interface Input extends Stream {
 
     }
 
-    public enum Input implements Stream {
-
-        INPUT("stdin");
-
-        private final String name;
-
-        Input(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
+    public interface Output extends Stream {
 
     }
 

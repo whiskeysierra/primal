@@ -7,13 +7,18 @@ import org.whiskeysierra.process.Family;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.Os;
 import org.whiskeysierra.process.ProcessService;
+import org.whiskeysierra.process.Redirection;
+import org.whiskeysierra.process.Stream;
 
 import javax.inject.Singleton;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 @Module(injects = Root.class)
 public final class InternalModule {
 
+    // TODO in case we only have one stream gobbler, we might just use the current thread and
+    // get a away without one
     private final Executor executor;
 
     public InternalModule() {
@@ -22,12 +27,6 @@ public final class InternalModule {
 
     public InternalModule(Executor executor) {
         this.executor = executor;
-    }
-
-    @Provides
-    @Singleton
-    public Executor provideExecutor() {
-        return executor;
     }
 
     @Provides
@@ -45,6 +44,25 @@ public final class InternalModule {
     @Singleton
     public Redirector provideRedirector(DefaultRedirector redirector) {
         return redirector;
+    }
+
+    @Provides
+    @Singleton
+    @Default
+    public Map<Stream, Redirection> provideDefaultRedirections(Redirector redirector) {
+        return redirector.getDefaults();
+    }
+
+    @Provides
+    @Singleton
+    public Executor provideExecutor() {
+        return executor;
+    }
+
+    @Provides
+    @Singleton
+    public ProcessExecutor provideProcessExecutor(DefaultProcessExecutor executor) {
+        return executor;
     }
 
     @Provides
