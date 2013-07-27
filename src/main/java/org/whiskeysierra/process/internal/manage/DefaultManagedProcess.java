@@ -27,7 +27,7 @@ final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedPr
     private String command;
 
     private final List<Object> arguments = Lists.newArrayList();
-    private Path directory = Paths.get(".");
+    private Path directory = Paths.get("");
 
     private final Map<String, String> environment = Maps.newHashMap(System.getenv());
 
