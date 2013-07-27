@@ -1,7 +1,5 @@
 package org.whiskeysierra.process.internal.manage;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.Redirection;
@@ -16,7 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
 final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedProcess {
@@ -26,7 +24,7 @@ final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedPr
     private Path executable;
     private String command;
 
-    private final List<Object> arguments = Lists.newArrayList();
+    private Iterable<?> arguments = Collections.emptySet();
     private Path directory = Paths.get("");
 
     private final Map<String, String> environment = Maps.newHashMap(System.getenv());
@@ -75,13 +73,12 @@ final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedPr
     @Override
     public ManagedProcess parameterize(Iterable<?> arguments) {
         // TODO null check
-        this.arguments.clear();
-        Iterables.addAll(this.arguments, arguments);
+        this.arguments = arguments;
         return this;
     }
 
     @Override
-    public List<Object> getArguments() {
+    public Iterable<?> getArguments() {
         return arguments;
     }
 

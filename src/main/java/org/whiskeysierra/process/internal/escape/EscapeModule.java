@@ -6,10 +6,9 @@ import org.whiskeysierra.process.spi.EscapeStrategy;
 
 import javax.inject.Singleton;
 
-@Module(library = true)
+@Module(library = true, complete = false)
 public final class EscapeModule {
 
-    // TODO @Default?
     @Provides
     @Singleton
     public EscapeStrategy provideEscapeStrategy(DefaultEscapeStrategy strategy) {

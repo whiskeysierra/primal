@@ -119,7 +119,7 @@ final class DefaultProcessExecutor implements ProcessExecutor {
         }
 
         final Process process = builder.start();
-        // TODO we need to include the execute, maybe...
+        // TODO we need to include the executor, if we need to gobble manually
         handleStreams(process, inputHandler, outputHandler, errorHandler);
 
         return factory.create(process, managed.getAllowedExitValues());

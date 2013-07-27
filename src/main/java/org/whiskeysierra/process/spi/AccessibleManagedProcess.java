@@ -14,7 +14,7 @@ public interface AccessibleManagedProcess {
 
     String getCommand();
 
-    List<Object> getArguments();
+    Iterable<?> getArguments();
 
     Path getDirectory();
 

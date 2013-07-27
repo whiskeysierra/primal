@@ -50,8 +50,7 @@ public final class PrimalIntegrationTest {
         final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
         final Path output = temp.newFile().toPath();
 
-        // TODO fix required toString here
-        final ManagedProcess managed = service.prepare("cat", input.toAbsolutePath().toString());
+        final ManagedProcess managed = service.prepare("cat", input);
 
         managed.redirect(Stream.INPUT, Redirection.NULL);
         managed.redirect(Stream.OUTPUT, Redirection.to(output));

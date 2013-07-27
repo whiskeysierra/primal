@@ -3,6 +3,7 @@ package org.whiskeysierra.process;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.EnumSet;
@@ -28,15 +29,17 @@ public final class Os {
     private final String version;
     private final String arch;
     private final String pathSeparator;
+    private final String fileSeparator;
     private final Set<Family> families;
 
-    private Os(String name, String version, String arch, String pathSeparator, Set<Family> families) {
+    private Os(String name, String version, String arch, String pathSeparator, String fileSeparator,
+        Set<Family> families) {
         this.name = name;
         this.version = version;
         this.arch = arch;
         this.pathSeparator = pathSeparator;
-        // TODO immutable enum set
-        this.families = families;
+        this.fileSeparator = fileSeparator;
+        this.families = Sets.immutableEnumSet(families);
     }
 
     public String getName() {
@@ -55,6 +58,10 @@ public final class Os {
         return pathSeparator;
     }
 
+    public String getFileSeparator() {
+        return fileSeparator;
+    }
+
     public Set<Family> getFamilies() {
         return families;
     }
@@ -69,6 +76,7 @@ public final class Os {
                 Objects.equals(this.getVersion(), other.getVersion()) &&
                 Objects.equals(this.getArch(), other.getArch()) &&
                 Objects.equals(this.getPathSeparator(), other.getPathSeparator()) &&
+                Objects.equals(this.getFileSeparator(), other.getFileSeparator()) &&
                 Objects.equals(this.getFamilies(), other.getFamilies());
         } else {
             return false;
@@ -77,13 +85,14 @@ public final class Os {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getVersion(), getArch(), getPathSeparator(), getFamilies());
+        return Objects.hash(getName(), getVersion(), getArch(),
+            getPathSeparator(), getFileSeparator(), getFamilies());
     }
 
     @Override
     public String toString() {
-        return String.format("%s [%s, %s, pathsep='%s', families=%s]",
-            name, version, arch, pathSeparator, families);
+        return String.format("%s [%s, %s, pathsep='%s', filesep='%s', families=%s]",
+            name, version, arch, pathSeparator, fileSeparator, families);
     }
 
     public static Os getCurrent() {
@@ -104,11 +113,12 @@ public final class Os {
         final String version = safeGet(properties, "os.version");
         final String arch = safeGet(properties, "os.arch");
         final String pathSeparator = safeGet(properties, "path.separator");
+        final String fileSeparator = safeGet(properties, "file.separator");
 
-        return of(name, version, arch, pathSeparator);
+        return of(name, version, arch, pathSeparator, fileSeparator);
     }
 
-    private static Os of(String name, String version, String arch, String pathSeparator) {
+    private static Os of(String name, String version, String arch, String pathSeparator, String fileSeparator) {
         final Set<Family> families = EnumSet.noneOf(Family.class);
 
         for (Family family : Family.values()) {
@@ -119,12 +129,12 @@ public final class Os {
         }
 
         Preconditions.checkState(!families.isEmpty(), "No family found for '%s'", name);
-        return new Os(name, version, arch, pathSeparator, families);
+        return new Os(name, version, arch, pathSeparator, fileSeparator, families);
     }
 
     @VisibleForTesting
-    static Os of(String name, String version, String arch, String pathSeparator, Family family, Family... families) {
-        return new Os(name, version, arch, pathSeparator, EnumSet.of(family, families));
+    static Os of(String name, String version, String arch, String pathSeparator, String fileSeparator, Family family, Family... families) {
+        return new Os(name, version, arch, pathSeparator, fileSeparator, EnumSet.of(family, families));
     }
 
 }
