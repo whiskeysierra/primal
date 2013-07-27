@@ -1,8 +1,6 @@
 package org.whiskeysierra.process;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,9 +13,6 @@ import static org.junit.Assume.assumeThat;
 import static org.whiskeysierra.process.PathMatchers.exists;
 
 public final class PrimalIntegrationTest {
-
-    @Rule
-    public final TestRule ignore = new IgnoreOnRule(UnsupportedOperationException.class);
 
     @Test
     public void readCommand() throws IOException {

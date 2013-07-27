@@ -14,6 +14,7 @@ import org.whiskeysierra.process.spi.ProcessExecutor;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedPr
     private String command;
 
     private final List<Object> arguments = Lists.newArrayList();
-    private Path directory;
+    private Path directory = Paths.get(".");
 
     private final Map<String, String> environment = Maps.newHashMap(System.getenv());
 
@@ -153,8 +154,7 @@ final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedPr
 
     @Override
     public RunningProcess call() throws IOException {
-        throw new UnsupportedOperationException();
-        //return executor.execute(this);
+        return executor.execute(this);
     }
 
     @Override

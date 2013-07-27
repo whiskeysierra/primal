@@ -1,5 +1,7 @@
 package org.whiskeysierra.process.internal.escape;
 
+import com.google.common.base.Functions;
+import com.google.common.collect.Lists;
 import org.whiskeysierra.process.spi.EscapeStrategy;
 
 import javax.inject.Inject;
@@ -15,16 +17,20 @@ final class DefaultEscapeStrategy implements EscapeStrategy {
 
     @Override
     public String escape(Path executable) {
-        throw new UnsupportedOperationException();
+        return executable.toAbsolutePath().toString();
     }
 
     @Override
     public String escape(String command) {
-        throw new UnsupportedOperationException();
+        return command;
     }
 
     @Override
     public List<String> escape(Iterable<?> arguments) {
-        throw new UnsupportedOperationException();
+        // TODO null check
+        // TODO handle nulls in arguments
+        // TODO escape/converting
+        // TODO substitution?
+        return Lists.transform(Lists.newArrayList(arguments), Functions.toStringFunction());
     }
 }

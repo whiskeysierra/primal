@@ -61,7 +61,7 @@ final class DefaultProcessExecutor implements ProcessExecutor {
 
         builder.command(command);
 
-        builder.directory(managed.getDirectory().toFile());
+        builder.directory(managed.getDirectory().toAbsolutePath().toFile());
         builder.environment().putAll(managed.getEnvironment());
 
         // TODO maybe we need a separate step, just finding out the action, than later on, we select a handler
