@@ -11,10 +11,9 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 2.2\.  [Jar](#jar)  
 3\.  [Usage](#usage)  
 4\.  [Design Goals](#designgoals)  
-4.1\.  [Testability](#testability)  
-4.2\.  [Mockability](#mockability)  
-4.3\.  [Support for Dependency Injection](#supportfordependencyinjection)  
-4.3.1\.  [Guice or Dagger](#guiceordagger)  
+4.1\.  [Mockability](#mockability)  
+4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
+4.2.1\.  [Guice or Dagger](#guiceordagger)  
 5\.  [References](#references)  
 6\.  [Attributions](#attributions)  
 
@@ -150,48 +149,69 @@ public final class ManagedProcessUsage {
 
 ## 4\. Design Goals
 
-<a name="testability"></a>
-
-### 4.1\. Testability
-Dependency Injection FTW!!11!
-
 <a name="mockability"></a>
 
-### 4.2\. Mockability
+### 4.1\. Mockability
 API is pure interface-based...
 
+[Mockito][mockito]
+
+[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/Mockability.java)
 ```java
-@Test
-public void test() {
-    final ProcessService service = EasyMock.createNiceMock(ProcessService.class);
-    final ManagedProcess managed = EasyMock.createNiceMock(ManagedProcess.class);
-    final RunningProcess process = EasyMock.createNiceMock(RunningProcess.class);
+package org.whiskeysierra.process;
 
-    EasyMock.expect(service.prepare("/path/to/executable")).andReturn(managed);
-    EasyMock.expect(managed.call()).andReturn(process);
+import org.junit.Test;
 
-    final InputStream stdout = createFakeStdout();
-    EasyMock.expect(process.getInput()).andReturn(stdout);
-    EasyMock.expect(process.waitFor()).andReturn(0);
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-    EasyMock.replay(service, managed, process);
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-    final ExampleService unit = new ExampleService(service);
-    unit.run();
+public final class Mockability {
 
-    EasyMock.verify(service, managed, process);
+    private static final class ExampleService {
+
+        private final ProcessService service;
+
+        public ExampleService(ProcessService service) {
+            this.service = service;
+        }
+
+        public String run() throws IOException {
+            return service.read(Paths.get("path/to/your/executable"));
+        }
+
+    }
+
+    @Test
+    public void test() throws IOException {
+        final ProcessService service = mock(ProcessService.class);
+
+        final String expected = "Hello World";
+
+        when(service.read(any(Path.class))).thenReturn(expected);
+
+        final ExampleService unit = new ExampleService(service);
+        final String actual = unit.run();
+
+        assertThat(actual, equalTo(expected));
+    }
+
 }
 ```
 
 <a name="supportfordependencyinjection"></a>
 
-### 4.3\. Support for Dependency Injection
+### 4.2\. Support for Dependency Injection
 
 <a name="guiceordagger"></a>
 
-#### 4.3.1\. Guice or Dagger
-[guice]: https://code.google.com/p/google-guice/ "Guice"
-[dagger]: https://github.com/square/dagger "Dagger"
+#### 4.2.1\. [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
@@ -208,6 +228,11 @@ public ProcessService provideProcessService() {
 ## 5\. References
 *	[Guice][guice]
 *	[Dagger][dagger]
+*	[Mockito][mockito]
+
+[guice]: https://code.google.com/p/google-guice/ "Guice"
+[dagger]: http://square.github.io/dagger/ "Dagger"
+[mockito]: https://code.google.com/p/mockito/ "Mockito"
 
 <a name="attributions"></a>
 

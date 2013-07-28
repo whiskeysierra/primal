@@ -32,40 +32,19 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 ## Design Goals
 
-### Testability
-Dependency Injection FTW!!11!
-
 ### Mockability
 API is pure interface-based...
 
+[Mockito][mockito]
+
+[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/Mockability.java)
 ```java
-@Test
-public void test() {
-    final ProcessService service = EasyMock.createNiceMock(ProcessService.class);
-    final ManagedProcess managed = EasyMock.createNiceMock(ManagedProcess.class);
-    final RunningProcess process = EasyMock.createNiceMock(RunningProcess.class);
-
-    EasyMock.expect(service.prepare("/path/to/executable")).andReturn(managed);
-    EasyMock.expect(managed.call()).andReturn(process);
-
-    final InputStream stdout = createFakeStdout();
-    EasyMock.expect(process.getInput()).andReturn(stdout);
-    EasyMock.expect(process.waitFor()).andReturn(0);
-
-    EasyMock.replay(service, managed, process);
-
-    final ExampleService unit = new ExampleService(service);
-    unit.run();
-
-    EasyMock.verify(service, managed, process);
-}
+!INCLUDE "src/spec/java/org/whiskeysierra/process/Mockability.java"
 ```
 
 ### Support for Dependency Injection
 
-#### Guice or Dagger
-[guice]: https://code.google.com/p/google-guice/ "Guice"
-[dagger]: https://github.com/square/dagger "Dagger"
+#### [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
@@ -79,6 +58,10 @@ public ProcessService provideProcessService() {
 
 ## References
 !REF
+
+[guice]: https://code.google.com/p/google-guice/ "Guice"
+[dagger]: http://square.github.io/dagger/ "Dagger"
+[mockito]: https://code.google.com/p/mockito/ "Mockito"
 
 ## Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
