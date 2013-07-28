@@ -15,7 +15,9 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 ## Installation
 
 ### Gradle
+```groovy
 compile group: 'org.whiskeysierra.process', name: 'primal', version: '#VERSION#'
+```
 
 ### Maven
 
