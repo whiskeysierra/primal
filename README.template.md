@@ -131,6 +131,7 @@ public ProcessService provideProcessService() {
 ## References
 !REF
 
+[guava]: https://code.google.com/p/guava-libraries/ "Guava"
 [guice]: https://code.google.com/p/google-guice/ "Guice"
 [dagger]: http://square.github.io/dagger/ "Dagger"
 [mockito]: https://code.google.com/p/mockito/ "Mockito"
