@@ -4,11 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.whiskeysierra.process.Os;
-import org.whiskeysierra.process.OsExamples;
 import org.whiskeysierra.process.spi.EscapeStrategy;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;

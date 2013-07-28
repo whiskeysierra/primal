@@ -4,7 +4,6 @@ import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.Stream;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
 
 public interface AccessibleManagedProcess {

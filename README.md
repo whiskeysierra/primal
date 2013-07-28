@@ -13,6 +13,8 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 3.1\.  [Basic Usage](#basicusage)  
 3.2\.  [Advanced Usage](#advancedusage)  
 3.3\.  [Process IO](#processio)  
+3.3.1\.  [JDK](#jdk)  
+3.3.2\.  [Guava](#guava)  
 4\.  [Design Goals](#designgoals)  
 4.1\.  [Mockability](#mockability)  
 4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
@@ -46,8 +48,8 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 <a name="basicusage"></a>
 
 ### 3.1\. Basic Usage
+Calling commands and executables, reading output as string, ...
 
-[PrimalUsage.java](src/spec/java/org/whiskeysierra/process/PrimalUsage.java)
 ```java
 package org.whiskeysierra.process;
 
@@ -62,15 +64,22 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assume.assumeThat;
 
-public final class PrimalUsage {
+public final class PrimalIntegrationTest {
 
-    private final Path executable = Paths.get("src/test/resources/debug/script.sh");
+    private final Path unix = Paths.get("src/test/resources/debug/script.sh");
+    private final Path windows = Paths.get("src/test/resources/debug/script.bat");
 
     @Test
-    public void callExecutable() throws IOException {
+    public void callExecutableUnix() throws IOException {
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        Primal.call(executable, "Hello", "World");
+        Primal.call(unix, "Hello", "World");
+    }
+    @Test
+    public void callExecutable() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.WINDOWS));
+
+        Primal.call(windows, "Hello", "World");
     }
 
     @Test
@@ -79,10 +88,18 @@ public final class PrimalUsage {
     }
 
     @Test
-    public void readExecutable() throws IOException {
+    public void readExecutableUnix() throws IOException {
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        final String output = Primal.read(executable, "Hello", "World");
+        final String output = Primal.read(unix, "Hello", "World");
+        assertThat(output, equalTo("Hello\nWorld\n"));
+    }
+
+    @Test
+    public void readExecutableWindows() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.WINDOWS));
+
+        final String output = Primal.read(windows, "Hello", "World");
         assertThat(output, equalTo("Hello\nWorld\n"));
     }
 
@@ -94,28 +111,36 @@ public final class PrimalUsage {
 
 }
 ```
+[Source](src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java)
 
 <a name="advancedusage"></a>
 
 ### 3.2\. Advanced Usage
+Setting environment variables, changing working directory, specify allowed exit values and
+stream redirection!
 
-[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
 ```java
 package org.whiskeysierra.process;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assume.assumeThat;
-import static org.whiskeysierra.process.Redirection.appendTo;
-import static org.whiskeysierra.process.Redirection.from;
-import static org.whiskeysierra.process.Redirection.to;
 
-public final class ManagedProcessUsage {
+// TODO make abstract, implement per os family
+public final class ProcessServiceIntegrationTest {
+
+    @Rule
+    public final TemporaryFolder temp = new TemporaryFolder();
 
     @Test
     public void cwd() throws IOException {
@@ -146,6 +171,8 @@ public final class ManagedProcessUsage {
 
     @Test
     public void exitValues() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
         final ProcessService service = Primal.createService();
         final ManagedProcess managed = service.prepare("ls", "-lh");
 
@@ -156,16 +183,19 @@ public final class ManagedProcessUsage {
         }
     }
 
+    // TODO add "type" test on windows
     @Test
     public void nullRedirection() throws IOException {
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh");
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        // no stdin
-        managed.redirect(Stream.INPUT, Redirection.NULL);
-        // redirect stderr into stdout
-        managed.redirect(Stream.ERROR, to(Stream.OUTPUT));
-        // redirect stdout to /dev/null (or similar)
+        final ProcessService service = Primal.createService();
+
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
+
+        final ManagedProcess managed = service.prepare("cat");
+
+        managed.redirect(Stream.INPUT, Redirection.from(input));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
         managed.redirect(Stream.OUTPUT, Redirection.NULL);
 
         try (RunningProcess process = managed.call()) {
@@ -173,34 +203,69 @@ public final class ManagedProcessUsage {
         }
     }
 
-    public void fileRedirection() throws IOException {
+    // TODO add "type" test on windows
+    @Test
+    public void redirectOutputToFile() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
         final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh");
 
-        final Path input = Paths.get("stdin.txt");
-        final Path error = Paths.get("stderr.log");
-        final Path output = Paths.get("stdout.log");
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
+        final Path output = temp.newFile().toPath();
 
-        // read stdin from stdin.txt
-        managed.redirect(Stream.INPUT, from(input));
-        // redirect to stderr.log (overwrite)
-        managed.redirect(Stream.ERROR, to(error));
-        // append to stdout.log
-        managed.redirect(Stream.OUTPUT, appendTo(output));
+        final ManagedProcess managed = service.prepare("cat", input);
+
+        managed.redirect(Stream.INPUT, Redirection.NULL);
+        managed.redirect(Stream.OUTPUT, Redirection.to(output));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
 
         try (RunningProcess process = managed.call()) {
             process.await();
         }
+
+        final byte[] actual = Files.readAllBytes(output);
+        final byte[] expected = Files.readAllBytes(input);
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    // TODO add "type" test on windows
+    @Test
+    public void redirectInputFromAndOutputToFile() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
+        final ProcessService service = Primal.createService();
+
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
+        final Path output = temp.newFile().toPath();
+
+        final ManagedProcess managed = service.prepare("cat");
+
+        managed.redirect(Stream.INPUT, Redirection.from(input));
+        managed.redirect(Stream.OUTPUT, Redirection.to(output));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
+
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
+
+        final byte[] actual = Files.readAllBytes(output);
+        final byte[] expected = Files.readAllBytes(input);
+
+        assertThat(actual, equalTo(expected));
     }
 
 }
 ```
+[Source](src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java)
 
 <a name="processio"></a>
 
 ### 3.3\. Process IO
 
-[JdkProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+<a name="jdk"></a>
+
+#### 3.3.1\. JDK
 ```java
 package org.whiskeysierra.process;
 
@@ -246,103 +311,54 @@ public final class JdkProcessIoUsage {
 
 }
 ```
+[Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
-[GuavaProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+<a name="guava"></a>
+
+#### 3.3.2\. Guava
 ```java
 package org.whiskeysierra.process;
 
+import com.google.common.io.Files;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assume.assumeThat;
-import static org.whiskeysierra.process.Redirection.appendTo;
-import static org.whiskeysierra.process.Redirection.from;
-import static org.whiskeysierra.process.Redirection.to;
 
-public final class ManagedProcessUsage {
+public final class GuavaProcessIoUsage {
+
+    @Rule
+    public final TemporaryFolder temp = new TemporaryFolder();
 
     @Test
-    public void cwd() throws IOException {
+    public void test() throws IOException {
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
         final ProcessService service = Primal.createService();
-        final Path directory = Paths.get("/home");
-        final ManagedProcess managed = service.prepare("ls", "-lh").in(directory);
+
+        final File input = Paths.get("src/test/resources/lorem-ipsum.txt").toFile();
+        final File output = temp.newFile();
+
+        final ManagedProcess managed = service.prepare("cat");
+
+        managed.redirect(Stream.INPUT, Redirection.from(input.toPath()));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
 
         try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    @Test
-    public void env() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh", "/home");
-
-        managed.with("CLICOLOR", "0");
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    @Test
-    public void exitValues() throws IOException {
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh");
-
-        managed.allow(0, 1, 2, 3, 4);
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    @Test
-    public void nullRedirection() throws IOException {
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh");
-
-        // no stdin
-        managed.redirect(Stream.INPUT, Redirection.NULL);
-        // redirect stderr into stdout
-        managed.redirect(Stream.ERROR, to(Stream.OUTPUT));
-        // redirect stdout to /dev/null (or similar)
-        managed.redirect(Stream.OUTPUT, Redirection.NULL);
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    public void fileRedirection() throws IOException {
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh");
-
-        final Path input = Paths.get("stdin.txt");
-        final Path error = Paths.get("stderr.log");
-        final Path output = Paths.get("stdout.log");
-
-        // read stdin from stdin.txt
-        managed.redirect(Stream.INPUT, from(input));
-        // redirect to stderr.log (overwrite)
-        managed.redirect(Stream.ERROR, to(error));
-        // append to stdout.log
-        managed.redirect(Stream.OUTPUT, appendTo(output));
-
-        try (RunningProcess process = managed.call()) {
+            Files.copy(process, output);
             process.await();
         }
     }
 
 }
 ```
+[Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
 <a name="designgoals"></a>
 
@@ -355,7 +371,6 @@ API is pure interface-based...
 
 [Mockito][mockito]
 
-[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/Mockability.java)
 ```java
 package org.whiskeysierra.process;
 
@@ -403,6 +418,7 @@ public final class Mockability {
 
 }
 ```
+[Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
 <a name="supportfordependencyinjection"></a>
 

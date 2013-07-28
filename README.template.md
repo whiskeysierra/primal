@@ -21,30 +21,35 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 ## Usage
 
 ### Basic Usage
+Calling commands and executables, reading output as string, ...
 
-[PrimalUsage.java](src/spec/java/org/whiskeysierra/process/PrimalUsage.java)
 ```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/PrimalUsage.java"
+!INCLUDE "src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java"
 ```
+[Source](src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java)
 
 ### Advanced Usage
+Setting environment variables, changing working directory, specify allowed exit values and
+stream redirection!
 
-[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
 ```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java"
+!INCLUDE "src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java"
 ```
+[Source](src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java)
 
 ### Process IO
 
-[JdkProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+#### JDK
 ```java
 !INCLUDE "src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java"
 ```
+[Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
-[GuavaProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+#### Guava
 ```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java"
+!INCLUDE "src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java"
 ```
+[Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
 ## Design Goals
 
@@ -53,10 +58,10 @@ API is pure interface-based...
 
 [Mockito][mockito]
 
-[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/Mockability.java)
 ```java
 !INCLUDE "src/spec/java/org/whiskeysierra/process/Mockability.java"
 ```
+[Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
 ### Support for Dependency Injection
 

@@ -9,39 +9,81 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static java.nio.file.Paths.get;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assume.assumeThat;
-import static org.whiskeysierra.process.PathMatchers.exists;
 
-// TODO run integration tests separately from unit tests
-public final class PrimalIntegrationTest {
+// TODO make abstract, implement per os family
+public final class ProcessServiceIntegrationTest {
 
     @Rule
     public final TemporaryFolder temp = new TemporaryFolder();
 
     @Test
-    public void readCommand() throws IOException {
+    public void cwd() throws IOException {
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        final String output = Primal.read("echo", "-n", "Hello World");
-        assertThat(output.trim(), equalTo("Hello World"));
+        final ProcessService service = Primal.createService();
+        final Path directory = Paths.get("/home");
+        final ManagedProcess managed = service.prepare("ls", "-lh").in(directory);
+
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
     }
 
     @Test
-    public void readExecutable() throws IOException {
-        final Path python = get("/usr/bin/python");
-        assumeThat(python, exists());
+    public void env() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        final String output = Primal.read(python, "-c", "print 'Hello World'");
-        assertThat(output.trim(), equalTo("Hello World"));
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh", "/home");
+
+        managed.with("CLICOLOR", "0");
+
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
     }
 
+    @Test
+    public void exitValues() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.allow(0, 1, 2, 3, 4);
+
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
+    }
+
+    // TODO add "type" test on windows
+    @Test
+    public void nullRedirection() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
+        final ProcessService service = Primal.createService();
+
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
+
+        final ManagedProcess managed = service.prepare("cat");
+
+        managed.redirect(Stream.INPUT, Redirection.from(input));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
+        managed.redirect(Stream.OUTPUT, Redirection.NULL);
+
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
+    }
+
+    // TODO add "type" test on windows
     @Test
     public void redirectOutputToFile() throws IOException {
-        // TODO introduce anntotation and rule for that
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
         final ProcessService service = Primal.createService();
@@ -65,9 +107,9 @@ public final class PrimalIntegrationTest {
         assertThat(actual, equalTo(expected));
     }
 
+    // TODO add "type" test on windows
     @Test
     public void redirectInputFromAndOutputToFile() throws IOException {
-        // TODO introduce anntotation and rule for that
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
         final ProcessService service = Primal.createService();

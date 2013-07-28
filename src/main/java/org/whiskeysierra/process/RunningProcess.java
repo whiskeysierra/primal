@@ -4,7 +4,6 @@ import com.google.common.io.InputSupplier;
 import com.google.common.io.OutputSupplier;
 
 import javax.annotation.Nullable;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.Future;
