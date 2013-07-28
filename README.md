@@ -10,6 +10,19 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 2.1\.  [Gradle](#gradle)  
 2.2\.  [Maven](#maven)  
 2.3\.  [Ivy](#ivy)  
+2.4\.  [Jar](#jar)  
+3\.  [Usage](#usage)  
+3.1\.  [Basic Usage](#basicusage)  
+3.2\.  [Advanced Usage](#advancedusage)  
+3.3\.  [Process IO](#processio)  
+3.3.1\.  [JDK](#jdk)  
+3.3.2\.  [Guava](#guava)  
+4\.  [Design Goals](#designgoals)  
+4.1\.  [Mockability](#mockability)  
+4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
+4.2.1\.  [Guice or Dagger](#guiceordagger)  
+5\.  [References](#references)  
+6\.  [Attributions](#attributions)  
 
 <a name="requirements"></a>
 
@@ -46,14 +59,20 @@ compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 ### 2.3\. Ivy
 ```xml
 <dependency org="org.whiskeysierra.process" name="primal" rev="0.1.0"/>
-``
+```
 
-### Jar
+<a name="jar"></a>
+
+### 2.4\. Jar
 
 
-## Usage
+<a name="usage"></a>
 
-### Basic Usage
+## 3\. Usage
+
+<a name="basicusage"></a>
+
+### 3.1\. Basic Usage
 Calling commands and executables, reading output as string, ...
 
 ```java
@@ -119,7 +138,9 @@ public final class PrimalIntegrationTest {
 ```
 [Source](src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java)
 
-### Advanced Usage
+<a name="advancedusage"></a>
+
+### 3.2\. Advanced Usage
 Setting environment variables, changing working directory, specify allowed exit values and
 stream redirection!
 
@@ -263,9 +284,13 @@ public final class ProcessServiceIntegrationTest {
 ```
 [Source](src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java)
 
-### Process IO
+<a name="processio"></a>
 
-#### JDK
+### 3.3\. Process IO
+
+<a name="jdk"></a>
+
+#### 3.3.1\. JDK
 ```java
 package org.whiskeysierra.process;
 
@@ -313,7 +338,9 @@ public final class JdkProcessIoUsage {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
-#### Guava
+<a name="guava"></a>
+
+#### 3.3.2\. Guava
 ```java
 package org.whiskeysierra.process;
 
@@ -358,9 +385,13 @@ public final class GuavaProcessIoUsage {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
-## Design Goals
+<a name="designgoals"></a>
 
-### Mockability
+## 4\. Design Goals
+
+<a name="mockability"></a>
+
+### 4.1\. Mockability
 API is pure interface-based...
 
 [Mockito][mockito]
@@ -414,9 +445,13 @@ public final class Mockability {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
-### Support for Dependency Injection
+<a name="supportfordependencyinjection"></a>
 
-#### [Guice][guice] or [Dagger][dagger]
+### 4.2\. Support for Dependency Injection
+
+<a name="guiceordagger"></a>
+
+#### 4.2.1\. [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
@@ -428,7 +463,9 @@ public ProcessService provideProcessService() {
 }
 ```
 
-## References
+<a name="references"></a>
+
+## 5\. References
 *	[Guice][guice]
 *	[Dagger][dagger]
 *	[Mockito][mockito]
@@ -437,6 +474,8 @@ public ProcessService provideProcessService() {
 [dagger]: http://square.github.io/dagger/ "Dagger"
 [mockito]: https://code.google.com/p/mockito/ "Mockito"
 
-## Attributions
+<a name="attributions"></a>
+
+## 6\. Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
 is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/)

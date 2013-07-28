@@ -32,7 +32,7 @@ compile group: 'org.whiskeysierra.process', name: 'primal', version: '#VERSION#'
 ### Ivy
 ```xml
 <dependency org="org.whiskeysierra.process" name="primal" rev="#VERSION#"/>
-``
+```
 
 ### Jar
 
