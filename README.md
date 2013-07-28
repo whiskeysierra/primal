@@ -1,4 +1,4 @@
-# ![Caveman icon](icon.png) Primal [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
+# ![Caveman icon](icon.png) Primal v0.1.0 [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
 
 A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
@@ -7,20 +7,9 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 ## Table of Contents
 1\.  [Requirements](#requirements)  
 2\.  [Installation](#installation)  
-2.1\.  [Gradle/Maven/Ivy](#gradle/maven/ivy)  
-2.2\.  [Jar](#jar)  
-3\.  [Usage](#usage)  
-3.1\.  [Basic Usage](#basicusage)  
-3.2\.  [Advanced Usage](#advancedusage)  
-3.3\.  [Process IO](#processio)  
-3.3.1\.  [JDK](#jdk)  
-3.3.2\.  [Guava](#guava)  
-4\.  [Design Goals](#designgoals)  
-4.1\.  [Mockability](#mockability)  
-4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
-4.2.1\.  [Guice or Dagger](#guiceordagger)  
-5\.  [References](#references)  
-6\.  [Attributions](#attributions)  
+2.1\.  [Gradle](#gradle)  
+2.2\.  [Maven](#maven)  
+2.3\.  [Ivy](#ivy)  
 
 <a name="requirements"></a>
 
@@ -33,21 +22,36 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 ## 2\. Installation
 
-<a name="gradle/maven/ivy"></a>
+<a name="gradle"></a>
 
-### 2.1\. Gradle/Maven/Ivy
+### 2.1\. Gradle
+compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 
-<a name="jar"></a>
+<a name="maven"></a>
 
-### 2.2\. Jar
+### 2.2\. Maven
 
-<a name="usage"></a>
+```xml
+<dependency>
+    <groupId>org.wiskeysierra.process</groupId>
+    <artifactId>primal</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
 
-## 3\. Usage
+<a name="ivy"></a>
 
-<a name="basicusage"></a>
+### 2.3\. Ivy
+```xml
+<dependency org="org.whiskeysierra.process" name="primal" rev="0.1.0"/>
+``
 
-### 3.1\. Basic Usage
+### Jar
+
+
+## Usage
+
+### Basic Usage
 Calling commands and executables, reading output as string, ...
 
 ```java
@@ -113,9 +117,7 @@ public final class PrimalIntegrationTest {
 ```
 [Source](src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java)
 
-<a name="advancedusage"></a>
-
-### 3.2\. Advanced Usage
+### Advanced Usage
 Setting environment variables, changing working directory, specify allowed exit values and
 stream redirection!
 
@@ -259,13 +261,9 @@ public final class ProcessServiceIntegrationTest {
 ```
 [Source](src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java)
 
-<a name="processio"></a>
+### Process IO
 
-### 3.3\. Process IO
-
-<a name="jdk"></a>
-
-#### 3.3.1\. JDK
+#### JDK
 ```java
 package org.whiskeysierra.process;
 
@@ -313,9 +311,7 @@ public final class JdkProcessIoUsage {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
-<a name="guava"></a>
-
-#### 3.3.2\. Guava
+#### Guava
 ```java
 package org.whiskeysierra.process;
 
@@ -360,13 +356,9 @@ public final class GuavaProcessIoUsage {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
-<a name="designgoals"></a>
+## Design Goals
 
-## 4\. Design Goals
-
-<a name="mockability"></a>
-
-### 4.1\. Mockability
+### Mockability
 API is pure interface-based...
 
 [Mockito][mockito]
@@ -420,13 +412,9 @@ public final class Mockability {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
-<a name="supportfordependencyinjection"></a>
+### Support for Dependency Injection
 
-### 4.2\. Support for Dependency Injection
-
-<a name="guiceordagger"></a>
-
-#### 4.2.1\. [Guice][guice] or [Dagger][dagger]
+#### [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
@@ -438,9 +426,7 @@ public ProcessService provideProcessService() {
 }
 ```
 
-<a name="references"></a>
-
-## 5\. References
+## References
 *	[Guice][guice]
 *	[Dagger][dagger]
 *	[Mockito][mockito]
@@ -449,8 +435,6 @@ public ProcessService provideProcessService() {
 [dagger]: http://square.github.io/dagger/ "Dagger"
 [mockito]: https://code.google.com/p/mockito/ "Mockito"
 
-<a name="attributions"></a>
-
-## 6\. Attributions
+## Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
 is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/)

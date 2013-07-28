@@ -1,4 +1,4 @@
-# ![Caveman icon](icon.png) Primal [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
+# ![Caveman icon](icon.png) Primal v#VERSION# [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
 
 A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
@@ -14,9 +14,26 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 ## Installation
 
-### Gradle/Maven/Ivy
+### Gradle
+compile group: 'org.whiskeysierra.process', name: 'primal', version: '#VERSION#'
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>org.wiskeysierra.process</groupId>
+    <artifactId>primal</artifactId>
+    <version>#VERSION#</version>
+</dependency>
+```
+
+### Ivy
+```xml
+<dependency org="org.whiskeysierra.process" name="primal" rev="#VERSION#"/>
+``
 
 ### Jar
+
 
 ## Usage
 
