@@ -10,9 +10,9 @@ for a while now, and even though it had received some significant updates in the
 of the platform ([ProcessBuilder](http://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html)),
 there are still plenty of possibilities to shoot yourself in the foot:
 
-1. `[Process.waitFor()](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#waitFor())` throws an
-[InterruptedException](http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html)` but
-fails to call `[Thread.interrupted()](http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#interrupted())`
+1. [Process.waitFor()](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#waitFor()) throws an
+[InterruptedException](http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html) but
+fails to call [Thread.interrupted()](http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#interrupted())
 which leads to subsequent `InterruptedException`s as long as the interrupted bit of the current thread is
 not reset.
 2. The associated output streams of a process, i.e. `stdout` and  `stderr`, must be promptly consumed or the
