@@ -12,7 +12,8 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 2.3\.  [Ivy](#ivy)  
 2.4\.  [Buildr](#buildr)  
 2.5\.  [SBT](#sbt)  
-2.6\.  [Jar](#jar)  
+2.6\.  [Leiningen](#leiningen)  
+2.7\.  [Standalone Jar file](#standalonejarfile)  
 3\.  [Usage](#usage)  
 3.1\.  [Basic Usage](#basicusage)  
 3.2\.  [Advanced Usage](#advancedusage)  
@@ -77,9 +78,16 @@ compile.with 'org.whiskeysierra.process:primal:jar:0.1.0'
 libraryDependencies += "org.whiskeysierra.process" % "primal" % "0.1.0"
 ```
 
-<a name="jar"></a>
+<a name="leiningen"></a>
 
-### 2.6\. Jar
+### 2.6\. Leiningen
+```clojure
+:dependencies [[org.whiskeysierra.process/primal "0.1.0"]]
+```
+
+<a name="standalonejarfile"></a>
+
+### 2.7\. Standalone Jar file
 
 
 <a name="usage"></a>

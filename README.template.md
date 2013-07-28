@@ -44,7 +44,12 @@ compile.with 'org.whiskeysierra.process:primal:jar:#VERSION#'
 libraryDependencies += "org.whiskeysierra.process" % "primal" % "#VERSION#"
 ```
 
-### Jar
+### Leiningen
+```clojure
+:dependencies [[org.whiskeysierra.process/primal "#VERSION#"]]
+```
+
+### Standalone Jar file
 
 
 ## Usage
