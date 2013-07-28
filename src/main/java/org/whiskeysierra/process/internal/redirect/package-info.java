@@ -1,0 +1,3 @@
+@ParametersAreNonnullByDefault package org.whiskeysierra.process.internal.redirect;
+
+import javax.annotation.ParametersAreNonnullByDefault;

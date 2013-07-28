@@ -1,0 +1,18 @@
+# TODOs
+
+- command vs. executable
+- test suite
+- cross platform testing
+- autoclose on exception?
+  - inner wrapper classes for streams?!
+- Debug mode
+  - Command line output
+  - Debug scripts?
+- http://www.cnblogs.com/abnercai/archive/2012/12/27/2836008.html
+- http://www.javaworld.com/jw-12-2000/jw-1229-traps.html
+- http://commons.apache.org/proper/commons-exec/
+- Argument escaping
+- Argument string converting (Flux?!)
+- Argument placeholder/substitution?
+- Timeouts/Watchdogs
+  - ExecutorService?
