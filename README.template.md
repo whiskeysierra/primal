@@ -34,6 +34,16 @@ compile group: 'org.whiskeysierra.process', name: 'primal', version: '#VERSION#'
 <dependency org="org.whiskeysierra.process" name="primal" rev="#VERSION#"/>
 ```
 
+### Buildr
+```ruby
+compile.with 'org.whiskeysierra.process:primal:jar:#VERSION#'
+```
+
+### SBT
+```scala
+libraryDependencies += "org.whiskeysierra.process" % "primal" % "#VERSION#"
+```
+
 ### Jar
 
 

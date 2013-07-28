@@ -10,7 +10,9 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 2.1\.  [Gradle](#gradle)  
 2.2\.  [Maven](#maven)  
 2.3\.  [Ivy](#ivy)  
-2.4\.  [Jar](#jar)  
+2.4\.  [Buildr](#buildr)  
+2.5\.  [SBT](#sbt)  
+2.6\.  [Jar](#jar)  
 3\.  [Usage](#usage)  
 3.1\.  [Basic Usage](#basicusage)  
 3.2\.  [Advanced Usage](#advancedusage)  
@@ -61,9 +63,23 @@ compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 <dependency org="org.whiskeysierra.process" name="primal" rev="0.1.0"/>
 ```
 
+<a name="buildr"></a>
+
+### 2.4\. Buildr
+```ruby
+compile.with 'org.whiskeysierra.process:primal:jar:0.1.0'
+```
+
+<a name="sbt"></a>
+
+### 2.5\. SBT
+```scala
+libraryDependencies += "org.whiskeysierra.process" % "primal" % "0.1.0"
+```
+
 <a name="jar"></a>
 
-### 2.4\. Jar
+### 2.6\. Jar
 
 
 <a name="usage"></a>
