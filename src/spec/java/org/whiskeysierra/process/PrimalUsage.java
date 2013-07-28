@@ -1,30 +1,44 @@
 package org.whiskeysierra.process;
 
+import org.junit.Test;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assume.assumeThat;
+
 public final class PrimalUsage {
 
-    public void call() throws IOException {
-        Primal.call("ls", "-lh");
+    private final Path executable = Paths.get("src/test/resources/debug/script.sh");
+
+    @Test
+    public void callExecutable() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
+        Primal.call(executable, "Hello", "World");
     }
 
-    public void read() throws IOException {
-        String output = Primal.read("ls", "-lh");
-        // process output further
+    @Test
+    public void callCommand() throws IOException {
+        Primal.call("echo", "Hello", "World");
     }
 
-    public void cwd() throws IOException {
-        final ProcessService service = Primal.createService();
-        final Path path = Paths.get("/path/to/directory");
-        final ManagedProcess managed = service.prepare("ls", "-lh").in(path);
+    @Test
+    public void readExecutable() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        try (RunningProcess process = managed.call()) {
+        final String output = Primal.read(executable, "Hello", "World");
+        assertThat(output, equalTo("Hello\nWorld\n"));
+    }
 
-
-            process.await();
-        }
+    @Test
+    public void readCommand() throws IOException {
+        String output = Primal.read("echo", "Hello", "World");
+        assertThat(output, equalTo("Hello World\n"));
     }
 
 }

@@ -13,7 +13,6 @@ import static java.nio.file.Paths.get;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assume.assumeThat;
 import static org.whiskeysierra.process.PathMatchers.exists;
 
