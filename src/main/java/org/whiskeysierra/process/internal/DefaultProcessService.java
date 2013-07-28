@@ -26,7 +26,10 @@ final class DefaultProcessService implements ProcessService {
         managed.redirect(Stream.INPUT, Redirection.NULL);
         managed.redirect(Stream.OUTPUT, Redirection.NULL);
         managed.redirect(Stream.ERROR, Redirection.NULL);
-        managed.call().await();
+
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
     }
 
     @Override
@@ -57,10 +60,14 @@ final class DefaultProcessService implements ProcessService {
         managed.redirect(Stream.INPUT, Redirection.NULL);
         managed.redirect(Stream.ERROR, Redirection.NULL);
 
-        final RunningProcess process = managed.call();
-        // TODO handle possible exception?!
-        final byte[] output = ByteStreams.toByteArray(process);
-        process.await();
+        final byte[] output;
+
+        try (RunningProcess process = managed.call()) {
+            output = ByteStreams.toByteArray(process);
+            process.await();
+        }
+
+        // TODO utf8 is not always the right choice, maybe we need to overload this? e.g. readBytes(..)
         return new String(output, Charsets.UTF_8);
     }
 

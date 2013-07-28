@@ -56,7 +56,9 @@ public final class PrimalIntegrationTest {
         managed.redirect(Stream.OUTPUT, Redirection.to(output));
         managed.redirect(Stream.ERROR, Redirection.NULL);
 
-        managed.call().await();
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
 
         final byte[] actual = Files.readAllBytes(output);
         final byte[] expected = Files.readAllBytes(input);
@@ -80,7 +82,9 @@ public final class PrimalIntegrationTest {
         managed.redirect(Stream.OUTPUT, Redirection.to(output));
         managed.redirect(Stream.ERROR, Redirection.NULL);
 
-        managed.call().await();
+        try (RunningProcess process = managed.call()) {
+            process.await();
+        }
 
         final byte[] actual = Files.readAllBytes(output);
         final byte[] expected = Files.readAllBytes(input);

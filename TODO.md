@@ -3,11 +3,8 @@
 - command vs. executable
 - test suite
 - cross platform testing
-- RunningProcess implements Closable?
-  - try with!
-  - finally: process.close()?!
-  - autoclose on exception?
-    - inner wrapper classes for streams?!
+- autoclose on exception?
+  - inner wrapper classes for streams?!
 - Debug mode
   - Command line output
   - Debug scripts?

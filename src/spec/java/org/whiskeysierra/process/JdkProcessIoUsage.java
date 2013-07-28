@@ -32,12 +32,12 @@ public final class JdkProcessIoUsage {
         managed.redirect(Stream.INPUT, Redirection.from(input));
         managed.redirect(Stream.ERROR, Redirection.NULL);
 
-        final RunningProcess process = managed.call();
+        try (RunningProcess process = managed.call()) {
+            Files.copy(process.getStandardOutput(), output,
+                StandardCopyOption.REPLACE_EXISTING);
 
-        Files.copy(process.getStandardOutput(), output,
-            StandardCopyOption.REPLACE_EXISTING);
-
-        process.await();
+            process.await();
+        }
     }
 
 }

@@ -31,11 +31,10 @@ public final class GuavaProcessIoUsage {
         managed.redirect(Stream.INPUT, Redirection.from(input.toPath()));
         managed.redirect(Stream.ERROR, Redirection.NULL);
 
-        final RunningProcess process = managed.call();
-
-        Files.copy(process, output);
-
-        process.await();
+        try (RunningProcess process = managed.call()) {
+            Files.copy(process, output);
+            process.await();
+        }
     }
 
 }

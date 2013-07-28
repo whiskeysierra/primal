@@ -18,7 +18,13 @@ public final class PrimalUsage {
     public void cwd() throws IOException {
         final ProcessService service = Primal.createService();
         final Path path = Paths.get("/path/to/directory");
-        service.prepare("ls", "-lh").in(path).call().await();
+        final ManagedProcess managed = service.prepare("ls", "-lh").in(path);
+
+        try (RunningProcess process = managed.call()) {
+
+
+            process.await();
+        }
     }
 
 }

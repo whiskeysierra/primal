@@ -30,7 +30,7 @@ final class DefaultRunningProcess implements RunningProcess {
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
         if (mayInterruptIfRunning && state.compareAndSet(State.RUNNING, State.CANCELLING)) {
-            process.destroy();
+            close();
             state.compareAndSet(State.CANCELLING, State.CANCELLED);
             return true;
         } else {
@@ -107,8 +107,8 @@ final class DefaultRunningProcess implements RunningProcess {
             state.set(State.FAILED);
             throw Exceptions.sneakyThrow(e);
         } finally {
-            process.destroy();
             Thread.interrupted();
+            close();
         }
     }
 
@@ -121,6 +121,11 @@ final class DefaultRunningProcess implements RunningProcess {
     @Override
     public void await() {
         get();
+    }
+
+    @Override
+    public void close() {
+        process.destroy();
     }
 
     static final class ErrorStreamSupplier implements InputSupplier<InputStream> {
