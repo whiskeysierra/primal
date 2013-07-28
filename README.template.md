@@ -20,12 +20,28 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 ## Usage
 
+### Basic Usage
+
 [PrimalUsage.java](src/spec/java/org/whiskeysierra/process/PrimalUsage.java)
 ```java
 !INCLUDE "src/spec/java/org/whiskeysierra/process/PrimalUsage.java"
 ```
 
+### Advanced Usage
+
 [ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
+```java
+!INCLUDE "src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java"
+```
+
+### Process IO
+
+[JdkProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+```java
+!INCLUDE "src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java"
+```
+
+[GuavaProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 ```java
 !INCLUDE "src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java"
 ```

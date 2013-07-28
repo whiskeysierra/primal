@@ -1,33 +1,39 @@
 package org.whiskeysierra.process;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assume.assumeThat;
+
 public final class JdkProcessIoUsage {
 
-    public void complete() throws IOException {
+    @Rule
+    public final TemporaryFolder temp = new TemporaryFolder();
+
+    @Test
+    public void test() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
         final ProcessService service = Primal.createService();
 
-        final Path input = Paths.get("input");
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
         final Path output = Paths.get("output");
-        final Path error = Paths.get("error");
 
-        final Path python = Paths.get("/usr/bin/python");
+        final ManagedProcess managed = service.prepare("cat");
 
-        final ManagedProcess managed = service.prepare(python);
-        managed.parameterize("-c", "print 'Hello from Python'");
+        managed.redirect(Stream.INPUT, Redirection.from(input));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
+
         final RunningProcess process = managed.call();
 
-        // write to stdin
-        Files.copy(input, process.getStandardInput());
-
-        // read from stdout
         Files.copy(process.getStandardOutput(), output);
-
-        // and stderr
-        Files.copy(process.getStandardError(), error);
 
         process.await();
     }
