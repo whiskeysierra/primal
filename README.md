@@ -4,62 +4,357 @@ A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
 **This library is still under development**
 
-## Requirements
+## Table of Contents
+1\.  [Requirements](#requirements)  
+2\.  [Installation](#installation)  
+2.1\.  [Gradle/Maven/Ivy](#gradle/maven/ivy)  
+2.2\.  [Jar](#jar)  
+3\.  [Usage](#usage)  
+3.1\.  [Basic Usage](#basicusage)  
+3.2\.  [Advanced Usage](#advancedusage)  
+3.3\.  [Process IO](#processio)  
+4\.  [Design Goals](#designgoals)  
+4.1\.  [Mockability](#mockability)  
+4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
+4.2.1\.  [Guice or Dagger](#guiceordagger)  
+5\.  [References](#references)  
+6\.  [Attributions](#attributions)  
+
+<a name="requirements"></a>
+
+## 1\. Requirements
 
 - Java 1.6 or higher
 - Guava 14.x
 
-## Installation
+<a name="installation"></a>
 
-### Gradle/Maven/Ivy
+## 2\. Installation
 
-### Jar
+<a name="gradle/maven/ivy"></a>
 
-## Usage
+### 2.1\. Gradle/Maven/Ivy
 
+<a name="jar"></a>
 
+### 2.2\. Jar
+
+<a name="usage"></a>
+
+## 3\. Usage
+
+<a name="basicusage"></a>
+
+### 3.1\. Basic Usage
 
 [PrimalUsage.java](src/spec/java/org/whiskeysierra/process/PrimalUsage.java)
-
-[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
-
-## Design Goals
-
-### Testability
-Dependency Injection FTW!!11!
-
-### Mockability
-API is pure interface-based...
-
 ```java
-@Test
-public void test() {
-    final ProcessService service = EasyMock.createNiceMock(ProcessService.class);
-    final ManagedProcess managed = EasyMock.createNiceMock(ManagedProcess.class);
-    final RunningProcess process = EasyMock.createNiceMock(RunningProcess.class);
+package org.whiskeysierra.process;
 
-    EasyMock.expect(service.prepare("/path/to/executable")).andReturn(managed);
-    EasyMock.expect(managed.call()).andReturn(process);
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-    final InputStream stdout = createFakeStdout();
-    EasyMock.expect(process.getInput()).andReturn(stdout);
-    EasyMock.expect(process.waitFor()).andReturn(0);
+public final class PrimalUsage {
 
-    EasyMock.replay(service, managed, process);
+    public void call() throws IOException {
+        Primal.call("ls", "-lh");
+    }
 
-    final ExampleService unit = new ExampleService(service);
-    unit.run();
+    public void read() throws IOException {
+        String output = Primal.read("ls", "-lh");
+        // process output further
+    }
 
-    EasyMock.verify(service, managed, process);
+    public void cwd() throws IOException {
+        final ProcessService service = Primal.createService();
+        final Path path = Paths.get("/path/to/directory");
+        service.prepare("ls", "-lh").in(path).call().await();
+    }
+
 }
 ```
 
-### Support for Dependency Injection
+<a name="advancedusage"></a>
 
-#### Guice or Dagger
+### 3.2\. Advanced Usage
+
+[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/ManagedProcessUsage.java)
+```java
+package org.whiskeysierra.process;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.whiskeysierra.process.Redirection.appendTo;
+import static org.whiskeysierra.process.Redirection.from;
+import static org.whiskeysierra.process.Redirection.to;
+
+public final class ManagedProcessUsage {
+
+    public void cwd() throws IOException {
+        final ProcessService service = Primal.createService();
+        final Path workingDirectory = Paths.get("/path/to/directory");
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.in(workingDirectory);
+
+        managed.call().await();
+    }
+
+    public void env() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.with("CLICOLOR", "0");
+
+        managed.call().await();
+    }
+
+    public void exitValues() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.allow(0, 1, 2, 3, 4);
+
+        managed.call().await();
+    }
+
+    public void nullRedirection() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        // no stdin
+        managed.redirect(Stream.INPUT, Redirection.NULL);
+        // redirect stderr into stdout
+        managed.redirect(Stream.ERROR, to(Stream.OUTPUT));
+        // redirect stdout to /dev/null (or similar)
+        managed.redirect(Stream.OUTPUT, Redirection.NULL);
+
+        managed.call().await();
+    }
+
+    public void fileRedirection() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        final Path input = Paths.get("stdin.txt");
+        final Path error = Paths.get("stderr.log");
+        final Path output = Paths.get("stdout.log");
+
+        // read stdin from stdin.txt
+        managed.redirect(Stream.INPUT, from(input));
+        // redirect to stderr.log (overwrite)
+        managed.redirect(Stream.ERROR, to(error));
+        // append to stdout.log
+        managed.redirect(Stream.OUTPUT, appendTo(output));
+
+        managed.call().await();
+    }
+
+}
+```
+
+<a name="processio"></a>
+
+### 3.3\. Process IO
+
+[JdkProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+```java
+package org.whiskeysierra.process;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assume.assumeThat;
+
+public final class JdkProcessIoUsage {
+
+    @Rule
+    public final TemporaryFolder temp = new TemporaryFolder();
+
+    @Test
+    public void test() throws IOException {
+        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
+
+        final ProcessService service = Primal.createService();
+
+        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
+        final Path output = temp.newFile().toPath();
+
+        final ManagedProcess managed = service.prepare("cat");
+
+        managed.redirect(Stream.INPUT, Redirection.from(input));
+        managed.redirect(Stream.ERROR, Redirection.NULL);
+
+        final RunningProcess process = managed.call();
+
+        Files.copy(process.getStandardOutput(), output,
+            StandardCopyOption.REPLACE_EXISTING);
+
+        process.await();
+    }
+
+}
+```
+
+[GuavaProcessIoUsage.java](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+```java
+package org.whiskeysierra.process;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.whiskeysierra.process.Redirection.appendTo;
+import static org.whiskeysierra.process.Redirection.from;
+import static org.whiskeysierra.process.Redirection.to;
+
+public final class ManagedProcessUsage {
+
+    public void cwd() throws IOException {
+        final ProcessService service = Primal.createService();
+        final Path workingDirectory = Paths.get("/path/to/directory");
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.in(workingDirectory);
+
+        managed.call().await();
+    }
+
+    public void env() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.with("CLICOLOR", "0");
+
+        managed.call().await();
+    }
+
+    public void exitValues() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        managed.allow(0, 1, 2, 3, 4);
+
+        managed.call().await();
+    }
+
+    public void nullRedirection() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        // no stdin
+        managed.redirect(Stream.INPUT, Redirection.NULL);
+        // redirect stderr into stdout
+        managed.redirect(Stream.ERROR, to(Stream.OUTPUT));
+        // redirect stdout to /dev/null (or similar)
+        managed.redirect(Stream.OUTPUT, Redirection.NULL);
+
+        managed.call().await();
+    }
+
+    public void fileRedirection() throws IOException {
+        final ProcessService service = Primal.createService();
+        final ManagedProcess managed = service.prepare("ls", "-lh");
+
+        final Path input = Paths.get("stdin.txt");
+        final Path error = Paths.get("stderr.log");
+        final Path output = Paths.get("stdout.log");
+
+        // read stdin from stdin.txt
+        managed.redirect(Stream.INPUT, from(input));
+        // redirect to stderr.log (overwrite)
+        managed.redirect(Stream.ERROR, to(error));
+        // append to stdout.log
+        managed.redirect(Stream.OUTPUT, appendTo(output));
+
+        managed.call().await();
+    }
+
+}
+```
+
+<a name="designgoals"></a>
+
+## 4\. Design Goals
+
+<a name="mockability"></a>
+
+### 4.1\. Mockability
+API is pure interface-based...
+
+[Mockito][mockito]
+
+[ManagedProcessUsage.java](src/spec/java/org/whiskeysierra/process/Mockability.java)
+```java
+package org.whiskeysierra.process;
+
+import org.junit.Test;
+
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public final class Mockability {
+
+    private static final class ExampleService {
+
+        private final ProcessService service;
+
+        public ExampleService(ProcessService service) {
+            this.service = service;
+        }
+
+        public String run() throws IOException {
+            return service.read(Paths.get("path/to/your/executable"));
+        }
+
+    }
+
+    @Test
+    public void test() throws IOException {
+        final ProcessService service = mock(ProcessService.class);
+
+        final String expected = "Hello World";
+
+        when(service.read(any(Path.class))).thenReturn(expected);
+
+        final ExampleService unit = new ExampleService(service);
+        final String actual = unit.run();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+}
+```
+
+<a name="supportfordependencyinjection"></a>
+
+### 4.2\. Support for Dependency Injection
+
+<a name="guiceordagger"></a>
+
+#### 4.2.1\. [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
+
 ```java
 @Provides
 public ProcessService provideProcessService() {
@@ -67,6 +362,19 @@ public ProcessService provideProcessService() {
 }
 ```
 
-## Attributions
+<a name="references"></a>
+
+## 5\. References
+*	[Guice][guice]
+*	[Dagger][dagger]
+*	[Mockito][mockito]
+
+[guice]: https://code.google.com/p/google-guice/ "Guice"
+[dagger]: http://square.github.io/dagger/ "Dagger"
+[mockito]: https://code.google.com/p/mockito/ "Mockito"
+
+<a name="attributions"></a>
+
+## 6\. Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
 is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/)
