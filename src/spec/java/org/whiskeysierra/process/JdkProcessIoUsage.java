@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assume.assumeThat;
@@ -24,7 +25,7 @@ public final class JdkProcessIoUsage {
         final ProcessService service = Primal.createService();
 
         final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
-        final Path output = Paths.get("output");
+        final Path output = temp.newFile().toPath();
 
         final ManagedProcess managed = service.prepare("cat");
 
@@ -33,7 +34,8 @@ public final class JdkProcessIoUsage {
 
         final RunningProcess process = managed.call();
 
-        Files.copy(process.getStandardOutput(), output);
+        Files.copy(process.getStandardOutput(), output,
+            StandardCopyOption.REPLACE_EXISTING);
 
         process.await();
     }
