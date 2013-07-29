@@ -1,6 +1,6 @@
-# Primal v#VERSION# [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
+# Primal v{{ version }} [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
 
-<img src="icon.png" alt="Caveman icon" align="right"/>
+<img src="docs/icon.png" alt="Caveman icon" align="right"/>
 
 ### A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 **This library is still under development**
@@ -18,7 +18,7 @@ The goal of this library is to provide a usable API to be used as an alternative
 2. provide a set of useful [Features](#features)
 
 ## Table of Contents
-!TOC
+!TOC 1
 
 ## Issues with the Process API
 
@@ -42,46 +42,7 @@ Interesting articles on the topic can be found [here][javaworld] and [here][cnbl
 - Java 1.7 or higher
 - [Guava][guava] 14.x
 
-## Installation
-
-### Gradle
-```groovy
-compile group: 'org.whiskeysierra.process', name: 'primal', version: '#VERSION#'
-```
-
-### Maven
-
-```xml
-<dependency>
-    <groupId>org.wiskeysierra.process</groupId>
-    <artifactId>primal</artifactId>
-    <version>#VERSION#</version>
-</dependency>
-```
-
-### Ivy
-```xml
-<dependency org="org.whiskeysierra.process" name="primal" rev="#VERSION#"/>
-```
-
-### Buildr
-```ruby
-compile.with 'org.whiskeysierra.process:primal:jar:#VERSION#'
-```
-
-### SBT
-```scala
-libraryDependencies += "org.whiskeysierra.process" % "primal" % "#VERSION#"
-```
-
-### Leiningen
-```clojure
-:dependencies [[org.whiskeysierra.process/primal "#VERSION#"]]
-```
-
-### Standalone Jar file
-Just download the jar file [here](#) and add it to your classpath. You'll also need to download all
-libraries mentioned in the [Requirements sections](#requirements).
+{% include "INSTALL.md" %}
 
 ## Usage
 
@@ -89,7 +50,7 @@ libraries mentioned in the [Requirements sections](#requirements).
 Calling commands and executables, reading output as string, ...
 
 ```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/BasicUsage.java"
+{% include "src/spec/java/org/whiskeysierra/process/BasicUsage.java" %}
 ```
 [Source](src/spec/java/org/whiskeysierra/process/BasicUsage.java)
 
@@ -100,7 +61,7 @@ Setting environment variables, changing working directory, specify allowed exit 
 
 #### Stream redirection
 ```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/RedirectUsage.java"
+{% include "src/spec/java/org/whiskeysierra/process/RedirectUsage.java" %}
 ```
 [Source](src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
 
@@ -133,8 +94,7 @@ public ProcessService provideProcessService() {
 }
 ```
 
-## To do
-!INCLUDE "TODO.md"
+{% include "TODO.md" %}
 
 ## References
 !REF
@@ -147,8 +107,7 @@ public ProcessService provideProcessService() {
 [cnblogs]: http://www.cnblogs.com/abnercai/archive/2012/12/27/2836008.html "java.lang.Process Pitfalls"
 
 ## Boring legal stuff
-
-!INCLUDE "LICENSE"
+{% include "LICENSE" %}
 
 ## Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 

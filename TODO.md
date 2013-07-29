@@ -1,3 +1,11 @@
+## TODO
+- `final byte[] output = ManagedProcess.read()`
+  - readFully into `ByteSource` via `ManagedProcess.readFully()`?
+- `ByteSource ProcessService.read()`?
+  - Specify, that ProcessService works in memory on the stream
+- `ManagedProcess.callAndIgnore()`?
+- custom `Exception` type?
+  - `ProcessException extends RuntimeException`?
 - command vs. executable
 - test suite
 - cross platform testing

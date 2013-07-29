@@ -1,6 +1,6 @@
 # Primal v0.1.0 [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
 
-<img src="icon.png" alt="Caveman icon" align="right"/>
+<img src="docs/icon.png" alt="Caveman icon" align="right"/>
 
 ### A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 **This library is still under development**
@@ -22,23 +22,9 @@ The goal of this library is to provide a usable API to be used as an alternative
 2\.  [Features](#features)  
 3\.  [Requirements](#requirements)  
 4\.  [Installation](#installation)  
-4.1\.  [Gradle](#gradle)  
-4.2\.  [Maven](#maven)  
-4.3\.  [Ivy](#ivy)  
-4.4\.  [Buildr](#buildr)  
-4.5\.  [SBT](#sbt)  
-4.6\.  [Leiningen](#leiningen)  
-4.7\.  [Standalone Jar file](#standalonejarfile)  
 5\.  [Usage](#usage)  
-5.1\.  [Basic Usage](#basicusage)  
-5.2\.  [Advanced Usage](#advancedusage)  
-5.2.1\.  [Stream redirection](#streamredirection)  
-5.2.2\.  [Process IO](#processio)  
 6\.  [Design Goals](#designgoals)  
-6.1\.  [Mockability](#mockability)  
-6.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
-6.2.1\.  [Guice or Dagger](#guiceordagger)  
-7\.  [To do](#todo)  
+7\.  [TODO](#todo)  
 8\.  [References](#references)  
 9\.  [Boring legal stuff](#boringlegalstuff)  
 10\.  [Attributions](#attributions)  
@@ -75,16 +61,12 @@ Interesting articles on the topic can be found [here][javaworld] and [here][cnbl
 
 ## 4\. Installation
 
-<a name="gradle"></a>
-
-### 4.1\. Gradle
+### Gradle
 ```groovy
 compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 ```
 
-<a name="maven"></a>
-
-### 4.2\. Maven
+### Maven
 
 ```xml
 <dependency>
@@ -94,37 +76,27 @@ compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 </dependency>
 ```
 
-<a name="ivy"></a>
-
-### 4.3\. Ivy
+### Ivy
 ```xml
 <dependency org="org.whiskeysierra.process" name="primal" rev="0.1.0"/>
 ```
 
-<a name="buildr"></a>
-
-### 4.4\. Buildr
+### Buildr
 ```ruby
 compile.with 'org.whiskeysierra.process:primal:jar:0.1.0'
 ```
 
-<a name="sbt"></a>
-
-### 4.5\. SBT
+### SBT
 ```scala
 libraryDependencies += "org.whiskeysierra.process" % "primal" % "0.1.0"
 ```
 
-<a name="leiningen"></a>
-
-### 4.6\. Leiningen
+### Leiningen
 ```clojure
 :dependencies [[org.whiskeysierra.process/primal "0.1.0"]]
 ```
 
-<a name="standalonejarfile"></a>
-
-### 4.7\. Standalone Jar file
+### Standalone Jar file
 Just download the jar file [here](#) and add it to your classpath. You'll also need to download all
 libraries mentioned in the [Requirements sections](#requirements).
 
@@ -132,9 +104,7 @@ libraries mentioned in the [Requirements sections](#requirements).
 
 ## 5\. Usage
 
-<a name="basicusage"></a>
-
-### 5.1\. Basic Usage
+### Basic Usage
 Calling commands and executables, reading output as string, ...
 
 ```java
@@ -157,16 +127,12 @@ public final class BasicUsage {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/BasicUsage.java)
 
-<a name="advancedusage"></a>
-
-### 5.2\. Advanced Usage
+### Advanced Usage
 Setting environment variables, changing working directory, specify allowed exit values
 
 [ConfigurationUsage.java](src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
 
-<a name="streamredirection"></a>
-
-#### 5.2.1\. Stream redirection
+#### Stream redirection
 ```java
 package org.whiskeysierra.process;
 
@@ -197,9 +163,7 @@ public final class RedirectUsage {
 ```
 [Source](src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
 
-<a name="processio"></a>
-
-#### 5.2.2\. Process IO
+#### Process IO
 
 [JDK example](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
@@ -209,22 +173,16 @@ public final class RedirectUsage {
 
 ## 6\. Design Goals
 
-<a name="mockability"></a>
-
-### 6.1\. Mockability
+### Mockability
 API is pure interface-based...
 
 [Mockito][mockito]
 
 [Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
-<a name="supportfordependencyinjection"></a>
+### Support for Dependency Injection
 
-### 6.2\. Support for Dependency Injection
-
-<a name="guiceordagger"></a>
-
-#### 6.2.1\. [Guice][guice] or [Dagger][dagger]
+#### [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
@@ -238,7 +196,14 @@ public ProcessService provideProcessService() {
 
 <a name="todo"></a>
 
-## 7\. To do
+## 7\. TODO
+- `final byte[] output = ManagedProcess.read()`
+  - readFully into `ByteSource` via `ManagedProcess.readFully()`?
+- `ByteSource ProcessService.read()`?
+  - Specify, that ProcessService works in memory on the stream
+- `ManagedProcess.callAndIgnore()`?
+- custom `Exception` type?
+  - `ProcessException extends RuntimeException`?
 - command vs. executable
 - test suite
 - cross platform testing
@@ -276,7 +241,6 @@ public ProcessService provideProcessService() {
 <a name="boringlegalstuff"></a>
 
 ## 9\. Boring legal stuff
-
 The MIT License (MIT)
 
 Copyright (c) 2013 Willi Schönborn
