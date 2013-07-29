@@ -1,4 +1,3 @@
-import org.gradle.api.artifacts.maven.MavenDeployment
 
 apply plugin: 'java'
 
@@ -8,18 +7,55 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    provided
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs  = ['src/spec/java', 'src/test/java']
+        }
+    }
+    integrationTest {
+        java.srcDir file('src/integration/java')
+        resources.srcDir file('src/integration/resources')
+    }
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
 dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '14.0.1'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '1.3.9'
-    compile group: 'net.sf.jung', name: 'jung-algorithms', version: '2.0.1'
+    compile group: 'com.google.gag', name: 'gag', version: '1.0.1'
+    compile group: 'com.squareup.dagger', name: 'dagger', version: '1.0.1'
+    provided group: 'com.squareup.dagger', name: 'dagger-compiler', version: '1.0.1'
 
-    testCompile group: 'junit', name: 'junit', version: '4.11', transitive: true
-    testCompile group: 'org.easymock', name: 'easymock', version: '3.1', transitive: true
-    testCompile group: 'org.hamcrest', name: 'hamcrest-integration', version: '1.3', transitive: true
+    testCompile group: 'junit', name: 'junit', version: '4.11', transitive: false
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.5', transitive: false
+    testCompile group: 'org.objenesis', name: 'objenesis', version: '1.0', transitive: false
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3', transitive: false
+    testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3', transitive: false
+
+    integrationTestCompile sourceSets.main.output
+    integrationTestCompile configurations.testCompile
+    integrationTestCompile sourceSets.test.output
+    integrationTestRuntime configurations.testRuntime
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
 tasks.withType(JavaCompile) {
-    options.compilerArgs = ['-proc:none', '-Werror', '-Xlint']
+    options.compilerArgs = ['-Werror', '-Xlint', '-Xlint:-processing']
+}
+
+task integrationTest(type: Test, dependsOn: jar) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    systemProperties['jar.path'] = jar.archivePath
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
@@ -32,9 +68,10 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
+check.dependsOn integrationTest
+
 artifacts {
     archives jar
     archives javadocJar
     archives sourcesJar
 }
-
