@@ -1,5 +1,3 @@
-## Installation
-
 ### Gradle
 ```groovy
 compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'

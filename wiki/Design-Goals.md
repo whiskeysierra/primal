@@ -1,4 +1,3 @@
-## Design Goals
 ### Dependency Injection
 
 #### [Guice][guice] or [Dagger][dagger]
