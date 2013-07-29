@@ -8,5 +8,5 @@ sed -E -i .tmp "s/^version: .*$/version: $version/g" site/index.md
 rm site/index.md.tmp
 
 git add site/index.md
-git commit -m "Updated site to version $version" --no-verify
+git commit -m "Updated site to version $version" --no-verify ||
 git subtree push --prefix site git@github.com:whiskeysierra/primal.git gh-pages
