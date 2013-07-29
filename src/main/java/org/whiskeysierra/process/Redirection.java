@@ -5,6 +5,7 @@ import org.whiskeysierra.process.Stream.Output;
 
 import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Path;
+import java.util.Locale;
 
 /**
  * @see Redirect
@@ -56,7 +57,12 @@ public abstract class Redirection {
          * The type of redirects returned from
          * {@link Redirect#appendTo Redirect.appendTo(File)}.
          */
-        APPEND
+        APPEND;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase(Locale.ENGLISH);
+        }
 
     }
 
