@@ -33,15 +33,16 @@ Interesting articles on the topic can be found [here][javaworld] and [here][cnbl
 3\.  [Usage](#usage)  
 3.1\.  [Basic Usage](#basicusage)  
 3.2\.  [Advanced Usage](#advancedusage)  
-3.3\.  [Process IO](#processio)  
-3.3.1\.  [JDK](#jdk)  
-3.3.2\.  [Guava](#guava)  
+3.2.1\.  [Stream redirection](#streamredirection)  
+3.2.2\.  [Process IO](#processio)  
 4\.  [Design Goals](#designgoals)  
 4.1\.  [Mockability](#mockability)  
 4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
 4.2.1\.  [Guice or Dagger](#guiceordagger)  
-5\.  [References](#references)  
-6\.  [Attributions](#attributions)  
+5\.  [To do](#todo)  
+6\.  [References](#references)  
+7\.  [Boring legal stuff](#boringlegalstuff)  
+8\.  [Attributions](#attributions)  
 
 <a name="requirements"></a>
 
@@ -119,191 +120,47 @@ Calling commands and executables, reading output as string, ...
 ```java
 package org.whiskeysierra.process;
 
-import org.junit.Test;
-
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assume.assumeThat;
+public final class BasicUsage {
 
-public final class PrimalIntegrationTest {
-
-    private final Path unix = Paths.get("src/test/resources/debug/script.sh");
-    private final Path windows = Paths.get("src/test/resources/debug/script.bat");
-
-    @Test
-    public void callExecutableUnix() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        Primal.call(unix, "Hello", "World");
-    }
-    @Test
-    public void callExecutable() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.WINDOWS));
-
-        Primal.call(windows, "Hello", "World");
-    }
-
-    @Test
-    public void callCommand() throws IOException {
+    public void call() throws IOException {
         Primal.call("echo", "Hello", "World");
     }
 
-    @Test
-    public void readExecutableUnix() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final String output = Primal.read(unix, "Hello", "World");
-        assertThat(output, equalTo("Hello\nWorld\n"));
-    }
-
-    @Test
-    public void readExecutableWindows() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.WINDOWS));
-
-        final String output = Primal.read(windows, "Hello", "World");
-        assertThat(output, equalTo("Hello\nWorld\n"));
-    }
-
-    @Test
-    public void readCommand() throws IOException {
+    public void read() throws IOException {
         String output = Primal.read("echo", "Hello", "World");
-        assertThat(output, equalTo("Hello World\n"));
+        System.out.println(output);
     }
 
 }
 ```
-[Source](src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java)
+[Source](src/spec/java/org/whiskeysierra/process/BasicUsage.java)
 
 <a name="advancedusage"></a>
 
 ### 3.2\. Advanced Usage
-Setting environment variables, changing working directory, specify allowed exit values and
-stream redirection!
+Setting environment variables, changing working directory, specify allowed exit values
 
+[ConfigurationUsage.java](src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
+
+<a name="streamredirection"></a>
+
+#### 3.2.1\. Stream redirection
 ```java
 package org.whiskeysierra.process;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assume.assumeThat;
+public final class RedirectUsage {
 
-// TODO make abstract, implement per os family
-public final class ProcessServiceIntegrationTest {
-
-    @Rule
-    public final TemporaryFolder temp = new TemporaryFolder();
-
-    @Test
-    public void cwd() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-        final Path directory = Paths.get("/home");
-        final ManagedProcess managed = service.prepare("ls", "-lh").in(directory);
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    @Test
-    public void env() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh", "/home");
-
-        managed.with("CLICOLOR", "0");
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    @Test
-    public void exitValues() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-        final ManagedProcess managed = service.prepare("ls", "-lh");
-
-        managed.allow(0, 1, 2, 3, 4);
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    // TODO add "type" test on windows
-    @Test
-    public void nullRedirection() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-
-        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
-
-        final ManagedProcess managed = service.prepare("cat");
-
-        managed.redirect(Stream.INPUT, Redirection.from(input));
-        managed.redirect(Stream.ERROR, Redirection.NULL);
-        managed.redirect(Stream.OUTPUT, Redirection.NULL);
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-    }
-
-    // TODO add "type" test on windows
-    @Test
-    public void redirectOutputToFile() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-
-        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
-        final Path output = temp.newFile().toPath();
-
-        final ManagedProcess managed = service.prepare("cat", input);
-
-        managed.redirect(Stream.INPUT, Redirection.NULL);
-        managed.redirect(Stream.OUTPUT, Redirection.to(output));
-        managed.redirect(Stream.ERROR, Redirection.NULL);
-
-        try (RunningProcess process = managed.call()) {
-            process.await();
-        }
-
-        final byte[] actual = Files.readAllBytes(output);
-        final byte[] expected = Files.readAllBytes(input);
-
-        assertThat(actual, equalTo(expected));
-    }
-
-    // TODO add "type" test on windows
-    @Test
     public void redirectInputFromAndOutputToFile() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
         final ProcessService service = Primal.createService();
 
-        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
-        final Path output = temp.newFile().toPath();
+        final Path input = Paths.get("input");
+        final Path output = Paths.get("output");
 
         final ManagedProcess managed = service.prepare("cat");
 
@@ -314,117 +171,19 @@ public final class ProcessServiceIntegrationTest {
         try (RunningProcess process = managed.call()) {
             process.await();
         }
-
-        final byte[] actual = Files.readAllBytes(output);
-        final byte[] expected = Files.readAllBytes(input);
-
-        assertThat(actual, equalTo(expected));
     }
 
 }
 ```
-[Source](src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java)
+[Source](src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
 
 <a name="processio"></a>
 
-### 3.3\. Process IO
+#### 3.2.2\. Process IO
 
-<a name="jdk"></a>
+[JDK example](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
-#### 3.3.1\. JDK
-```java
-package org.whiskeysierra.process;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assume.assumeThat;
-
-public final class JdkProcessIoUsage {
-
-    @Rule
-    public final TemporaryFolder temp = new TemporaryFolder();
-
-    @Test
-    public void test() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-
-        final Path input = Paths.get("src/test/resources/lorem-ipsum.txt");
-        final Path output = temp.newFile().toPath();
-
-        final ManagedProcess managed = service.prepare("cat");
-
-        managed.redirect(Stream.INPUT, Redirection.from(input));
-        managed.redirect(Stream.ERROR, Redirection.NULL);
-
-        try (RunningProcess process = managed.call()) {
-            Files.copy(process.getStandardOutput(), output,
-                StandardCopyOption.REPLACE_EXISTING);
-
-            process.await();
-        }
-    }
-
-}
-```
-[Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
-
-<a name="guava"></a>
-
-#### 3.3.2\. Guava
-```java
-package org.whiskeysierra.process;
-
-import com.google.common.io.Files;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assume.assumeThat;
-
-public final class GuavaProcessIoUsage {
-
-    @Rule
-    public final TemporaryFolder temp = new TemporaryFolder();
-
-    @Test
-    public void test() throws IOException {
-        assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
-
-        final ProcessService service = Primal.createService();
-
-        final File input = Paths.get("src/test/resources/lorem-ipsum.txt").toFile();
-        final File output = temp.newFile();
-
-        final ManagedProcess managed = service.prepare("cat");
-
-        managed.redirect(Stream.INPUT, Redirection.from(input.toPath()));
-        managed.redirect(Stream.ERROR, Redirection.NULL);
-
-        try (RunningProcess process = managed.call()) {
-            Files.copy(process, output);
-            process.await();
-        }
-    }
-
-}
-```
-[Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+[Guava example](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
 <a name="designgoals"></a>
 
@@ -437,53 +196,6 @@ API is pure interface-based...
 
 [Mockito][mockito]
 
-```java
-package org.whiskeysierra.process;
-
-import org.junit.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-public final class Mockability {
-
-    private static final class ExampleService {
-
-        private final ProcessService service;
-
-        public ExampleService(ProcessService service) {
-            this.service = service;
-        }
-
-        public String run() throws IOException {
-            return service.read(Paths.get("path/to/your/executable"));
-        }
-
-    }
-
-    @Test
-    public void test() throws IOException {
-        final ProcessService service = mock(ProcessService.class);
-
-        final String expected = "Hello World";
-
-        when(service.read(any(Path.class))).thenReturn(expected);
-
-        final ExampleService unit = new ExampleService(service);
-        final String actual = unit.run();
-
-        assertThat(actual, equalTo(expected));
-    }
-
-}
-```
 [Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
 <a name="supportfordependencyinjection"></a>
@@ -504,9 +216,29 @@ public ProcessService provideProcessService() {
 }
 ```
 
+<a name="todo"></a>
+
+## 5\. To do
+- command vs. executable
+- test suite
+- cross platform testing
+- autoclose on exception?
+  - inner wrapper classes for streams?!
+- Debug mode
+  - Command line output
+  - Debug scripts?
+- http://www.cnblogs.com/abnercai/archive/2012/12/27/2836008.html
+- http://www.javaworld.com/jw-12-2000/jw-1229-traps.html
+- http://commons.apache.org/proper/commons-exec/
+- Argument escaping
+- Argument string converting (Flux?!)
+- Argument placeholder/substitution?
+- Timeouts/Watchdogs
+  - ExecutorService?
+
 <a name="references"></a>
 
-## 5\. References
+## 6\. References
 *	[Guava][guava]
 *	[Guice][guice]
 *	[Dagger][dagger]
@@ -521,8 +253,33 @@ public ProcessService provideProcessService() {
 [javaworld]: http://www.javaworld.com/jw-12-2000/jw-1229-traps.html "When Runtime.exec() won't"
 [cnblogs]: http://www.cnblogs.com/abnercai/archive/2012/12/27/2836008.html "java.lang.Process Pitfalls"
 
+<a name="boringlegalstuff"></a>
+
+## 7\. Boring legal stuff
+
+The MIT License (MIT)
+
+Copyright (c) 2013 Willi Schönborn
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 <a name="attributions"></a>
 
-## 6\. Attributions
+## 8\. Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
 is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/)

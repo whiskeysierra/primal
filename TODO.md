@@ -1,5 +1,3 @@
-# TODOs
-
 - command vs. executable
 - test suite
 - cross platform testing

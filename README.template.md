@@ -75,32 +75,26 @@ libraries mentioned in the [Requirements sections](#requirements).
 Calling commands and executables, reading output as string, ...
 
 ```java
-!INCLUDE "src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java"
+!INCLUDE "src/spec/java/org/whiskeysierra/process/BasicUsage.java"
 ```
-[Source](src/integration/java/org/whiskeysierra/process/PrimalIntegrationTest.java)
+[Source](src/spec/java/org/whiskeysierra/process/BasicUsage.java)
 
 ### Advanced Usage
-Setting environment variables, changing working directory, specify allowed exit values and
-stream redirection!
+Setting environment variables, changing working directory, specify allowed exit values
 
+[ConfigurationUsage.java](src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
+
+#### Stream redirection
 ```java
-!INCLUDE "src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java"
+!INCLUDE "src/spec/java/org/whiskeysierra/process/RedirectUsage.java"
 ```
-[Source](src/integration/java/org/whiskeysierra/process/ProcessServiceIntegrationTest.java)
+[Source](src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
 
-### Process IO
+#### Process IO
 
-#### JDK
-```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java"
-```
-[Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+[JDK example](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
-#### Guava
-```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java"
-```
-[Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+[Guava example](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
 ## Design Goals
 
@@ -109,9 +103,6 @@ API is pure interface-based...
 
 [Mockito][mockito]
 
-```java
-!INCLUDE "src/spec/java/org/whiskeysierra/process/Mockability.java"
-```
 [Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
 
 ### Support for Dependency Injection
@@ -128,6 +119,9 @@ public ProcessService provideProcessService() {
 }
 ```
 
+## To do
+!INCLUDE "TODO.md"
+
 ## References
 !REF
 
@@ -137,6 +131,10 @@ public ProcessService provideProcessService() {
 [mockito]: https://code.google.com/p/mockito/ "Mockito"
 [javaworld]: http://www.javaworld.com/jw-12-2000/jw-1229-traps.html "When Runtime.exec() won't"
 [cnblogs]: http://www.cnblogs.com/abnercai/archive/2012/12/27/2836008.html "java.lang.Process Pitfalls"
+
+## Boring legal stuff
+
+!INCLUDE "LICENSE"
 
 ## Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
