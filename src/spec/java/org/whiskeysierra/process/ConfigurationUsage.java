@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 
 public final class ConfigurationUsage {
 
-    public void configure() throws IOException {
+    public void directoryEnvironmentExitValueAndNullRedirectionUsage() throws IOException {
         final ProcessService service = Primal.createService();
         final ManagedProcess managed = service.prepare("ls", "-lh");
 

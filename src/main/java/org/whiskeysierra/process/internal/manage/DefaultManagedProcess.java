@@ -1,6 +1,8 @@
 package org.whiskeysierra.process.internal.manage;
 
 import com.google.common.collect.Maps;
+import com.google.common.io.ByteSource;
+import com.google.common.io.ByteStreams;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.RunningProcess;
@@ -152,6 +154,18 @@ final class DefaultManagedProcess implements ManagedProcess, AccessibleManagedPr
     @Override
     public RunningProcess call() throws IOException {
         return executor.execute(this);
+    }
+
+    @Override
+    public ByteSource read() throws IOException {
+        redirect(Stream.INPUT, Redirection.NULL);
+        redirect(Stream.ERROR, Redirection.NULL);
+
+        try (RunningProcess process = call()) {
+            final byte[] output = ByteStreams.toByteArray(process);
+            process.await();
+            return ByteStreams.asByteSource(output);
+        }
     }
 
     @Override

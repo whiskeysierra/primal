@@ -23,7 +23,7 @@ public final class Mockability {
         }
 
         public String run() throws IOException {
-            return service.read(Paths.get("path/to/your/executable"));
+            return service.toString(Paths.get("path/to/your/executable"));
         }
 
     }
@@ -34,7 +34,7 @@ public final class Mockability {
 
         final String expected = "Hello World";
 
-        when(service.read(any(Path.class))).thenReturn(expected);
+        when(service.toString(any(Path.class))).thenReturn(expected);
 
         final ExampleService unit = new ExampleService(service);
         final String actual = unit.run();

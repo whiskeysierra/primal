@@ -1,5 +1,6 @@
 package org.whiskeysierra.process;
 
+import com.google.common.io.ByteSource;
 import dagger.ObjectGraph;
 import org.whiskeysierra.process.internal.InternalModule;
 import org.whiskeysierra.process.internal.Root;
@@ -40,24 +41,45 @@ public final class Primal {
         service.call(command, arguments);
     }
 
-    public static String read(Path executable, Object... arguments) throws IOException {
+    public static String toString(Path executable, Object... arguments) throws IOException {
         final ProcessService service = createService();
-        return service.read(executable, arguments);
+        return service.toString(executable, arguments);
     }
 
-    public static String read(String command, Object... arguments) throws IOException {
+    public static String toString(String command, Object... arguments) throws IOException {
         final ProcessService service = createService();
-        return service.read(command, arguments);
+        return service.toString(command, arguments);
     }
 
-    public static String read(Path executable, Iterable<?> arguments) throws IOException {
+    public static String toString(Path executable, Iterable<?> arguments) throws IOException {
         final ProcessService service = createService();
-        return service.read(executable, arguments);
+        return service.toString(executable, arguments);
     }
 
-    public static String read(String command, Iterable<?> arguments) throws IOException {
+    public static String toString(String command, Iterable<?> arguments) throws IOException {
         final ProcessService service = createService();
-        return service.read(command, arguments);
+        return service.toString(command, arguments);
     }
+
+    public static ByteSource read(Path executable, Object... arguments) throws IOException {
+        final ProcessService service = createService();
+        return service.prepare(executable, arguments).read();
+    }
+
+    public static ByteSource read(String command, Object... arguments) throws IOException {
+        final ProcessService service = createService();
+        return service.prepare(command, arguments).read();
+    }
+
+    public static ByteSource read(Path executable, Iterable<?> arguments) throws IOException {
+        final ProcessService service = createService();
+        return service.prepare(executable, arguments).read();
+    }
+
+    public static ByteSource read(String command, Iterable<?> arguments) throws IOException {
+        final ProcessService service = createService();
+        return service.prepare(command, arguments).read();
+    }
+
 
 }

@@ -110,17 +110,26 @@ Calling commands and executables, reading output as string, ...
 ```java
 package org.whiskeysierra.process;
 
+import com.google.common.io.ByteSource;
+
 import java.io.IOException;
 
 public final class BasicUsage {
 
-    public void call() throws IOException {
+    public void callUsage() throws IOException {
         Primal.call("echo", "Hello", "World");
     }
 
-    public void read() throws IOException {
-        String output = Primal.read("echo", "Hello", "World");
+    public void toStringUsage() throws IOException {
+        String output = Primal.toString("echo", "Hello", "World");
         System.out.println(output);
+    }
+
+    public void readUsage() throws IOException {
+        final ByteSource output = Primal.read("echo", "Hello", "World");
+
+        // process output further
+        final byte[] bytes = output.read();
     }
 
 }
@@ -197,11 +206,8 @@ public ProcessService provideProcessService() {
 <a name="todo"></a>
 
 ## 7\. TODO
-- `final byte[] output = ManagedProcess.read()`
-  - readFully into `ByteSource` via `ManagedProcess.readFully()`?
-- `ByteSource ProcessService.read()`?
+- `ByteSource ManagedProcess.read()`?
   - Specify, that ProcessService works in memory on the stream
-- `ManagedProcess.callAndIgnore()`?
 - custom `Exception` type?
   - `ProcessException extends RuntimeException`?
 - command vs. executable

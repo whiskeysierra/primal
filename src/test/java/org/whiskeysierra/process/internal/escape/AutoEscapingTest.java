@@ -25,7 +25,7 @@ public final class AutoEscapingTest {
         final Path executable = Paths.get("src/test/resources/debug/script.sh");
         final Path path = Paths.get("path with spaces", "and sub directories");
         final Object[] arguments = {"a", "b", "c d e", path};
-        final String output = Primal.read(executable, arguments);
+        final String output = Primal.toString(executable, arguments);
 
         final String expected = Joiner.on('\n').join(arguments) + '\n';
         assertThat(output, equalTo(expected));

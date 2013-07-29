@@ -1,7 +1,7 @@
 package org.whiskeysierra.process.internal;
 
 import com.google.common.base.Charsets;
-import com.google.common.io.ByteStreams;
+import com.google.common.io.ByteSource;
 import org.whiskeysierra.process.ManagedProcess;
 import org.whiskeysierra.process.ProcessService;
 import org.whiskeysierra.process.Redirection;
@@ -34,65 +34,42 @@ final class DefaultProcessService implements ProcessService {
 
     @Override
     public void call(Path executable, Object... arguments) throws IOException {
-        final ManagedProcess managed = prepare(executable, arguments);
-        callAndAwait(managed);
+        callAndAwait(prepare(executable, arguments));
     }
 
     @Override
     public void call(String command, Object... arguments) throws IOException {
-        final ManagedProcess managed = prepare(command, arguments);
-        callAndAwait(managed);
+        callAndAwait(prepare(command, arguments));
     }
 
     @Override
     public void call(Path executable, Iterable<?> arguments) throws IOException {
-        final ManagedProcess managed = prepare(executable, arguments);
-        callAndAwait(managed);
+        callAndAwait(prepare(executable, arguments));
     }
 
     @Override
     public void call(String command, Iterable<?> arguments) throws IOException {
-        final ManagedProcess managed = prepare(command, arguments);
-        callAndAwait(managed);
-    }
-
-    private String callAndCaptureOutput(ManagedProcess managed) throws IOException {
-        managed.redirect(Stream.INPUT, Redirection.NULL);
-        managed.redirect(Stream.ERROR, Redirection.NULL);
-
-        final byte[] output;
-
-        try (RunningProcess process = managed.call()) {
-            output = ByteStreams.toByteArray(process);
-            process.await();
-        }
-
-        // TODO utf8 is not always the right choice, maybe we need to overload this? e.g. readBytes(..)
-        return new String(output, Charsets.UTF_8);
+        callAndAwait(prepare(command, arguments));
     }
 
     @Override
-    public String read(Path executable, Object... arguments) throws IOException {
-        final ManagedProcess managed = prepare(executable, arguments);
-        return callAndCaptureOutput(managed);
+    public String toString(Path executable, Object... arguments) throws IOException {
+        return prepare(executable, arguments).read().asCharSource(Charsets.UTF_8).read();
     }
 
     @Override
-    public String read(String command, Object... arguments) throws IOException {
-        final ManagedProcess managed = prepare(command, arguments);
-        return callAndCaptureOutput(managed);
+    public String toString(String command, Object... arguments) throws IOException {
+        return prepare(command, arguments).read().asCharSource(Charsets.UTF_8).read();
     }
 
     @Override
-    public String read(Path executable, Iterable<?> arguments) throws IOException {
-        final ManagedProcess managed = prepare(executable, arguments);
-        return callAndCaptureOutput(managed);
+    public String toString(Path executable, Iterable<?> arguments) throws IOException {
+        return prepare(executable, arguments).read().asCharSource(Charsets.UTF_8).read();
     }
 
     @Override
-    public String read(String command, Iterable<?> arguments) throws IOException {
-        final ManagedProcess managed = prepare(command, arguments);
-        return callAndCaptureOutput(managed);
+    public String toString(String command, Iterable<?> arguments) throws IOException {
+        return prepare(command, arguments).read().asCharSource(Charsets.UTF_8).read();
     }
 
     @Override
