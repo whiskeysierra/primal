@@ -8,7 +8,7 @@ python wiki/render.py README.template.md version=${version} | .markdown-pp/markd
 git add README.md
 
 
-for template in $(ls wiki/_Templates); do
-    python wiki/render.py wiki/_Templates/${template} version=${version} | .markdown-pp/markdown-pp.py /dev/stdin wiki/${template}
+for template in $(ls wiki/.templates); do
+    python wiki/render.py wiki/.templates/${template} version=${version} > wiki/${template}
     git add wiki/${template}
 done
