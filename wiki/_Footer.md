@@ -1,1 +1,0 @@
-[License](http://choosealicense.com/licenses/mit/)
