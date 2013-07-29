@@ -28,7 +28,7 @@ public final class BasicUsage {
 
 }
 ```
-[Source](../primal/blob/src/spec/java/org/whiskeysierra/process/BasicUsage.java)
+[Source](../blob/master/src/spec/java/org/whiskeysierra/process/BasicUsage.java)
 
 ### Advanced Usage
 Setting environment variables, changing working directory, specify allowed exit values
@@ -60,7 +60,7 @@ public final class ConfigurationUsage {
 
 }
 ```
-[Source](../primal/blob/src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
+[Source](../blob/master/src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
 
 #### Stream redirection
 ```java
@@ -91,7 +91,7 @@ public final class RedirectUsage {
 
 }
 ```
-[Source](../primal/blob/src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
+[Source](../blob/master/src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
 
 #### Process IO
 
@@ -141,7 +141,7 @@ public final class JdkProcessIoUsage {
 
 }
 ```
-[Source](../primal/blob/src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+[Source](../blob/master/src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
 Guava
 [Guava example](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
@@ -187,4 +187,4 @@ public final class GuavaProcessIoUsage {
 
 }
 ```
-[Source](../primal/blob/src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+[Source](../blob/master/src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
