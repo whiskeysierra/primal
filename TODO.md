@@ -1,4 +1,7 @@
 ## TODO
+- Site
+  - site url locally vs. remote
+  - dynamic version pages
 - `ByteSource ManagedProcess.read()`?
   - Specify, that ProcessService works in memory on the stream
 - custom `Exception` type?
