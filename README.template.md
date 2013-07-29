@@ -45,4 +45,4 @@ The goal of this library is to provide a usable API to be used as an alternative
 ## Boring legal stuff
 {% include "LICENSE" %}
 
-{% include "wiki/Attributions.md" %}
+{% include "wiki/.partials/Attributions.md" %}

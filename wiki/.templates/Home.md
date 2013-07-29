@@ -5,4 +5,4 @@
 ### A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 **This library is still under development**
 
-{% include "wiki/Attributions.md" %}
+{% include "wiki/.partials/Attributions.md" %}

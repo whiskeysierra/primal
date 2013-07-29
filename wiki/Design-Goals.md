@@ -17,4 +17,4 @@ API is pure interface-based...
 
 [Mockito][mockito]
 
-[Source](src/spec/java/org/whiskeysierra/process/Mockability.java)
+[Source](../src/spec/java/org/whiskeysierra/process/Mockability.java)
