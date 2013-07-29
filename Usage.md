@@ -1,3 +1,5 @@
+## Usage
+
 ### Basic Usage
 Calling commands and executables, reading output as string, ...
 
@@ -28,7 +30,7 @@ public final class BasicUsage {
 
 }
 ```
-[Source](src/spec/java/org/whiskeysierra/process/BasicUsage.java)
+[Source](../src/spec/java/org/whiskeysierra/process/BasicUsage.java)
 
 ### Advanced Usage
 Setting environment variables, changing working directory, specify allowed exit values
@@ -60,7 +62,7 @@ public final class ConfigurationUsage {
 
 }
 ```
-[Source](src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
+[Source](../src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
 
 #### Stream redirection
 ```java
@@ -91,7 +93,7 @@ public final class RedirectUsage {
 
 }
 ```
-[Source](src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
+[Source](../src/spec/java/org/whiskeysierra/process/RedirectUsage.java)
 
 #### Process IO
 
@@ -141,7 +143,7 @@ public final class JdkProcessIoUsage {
 
 }
 ```
-[Source](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
+[Source](../src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
 Guava
 [Guava example](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
@@ -187,4 +189,4 @@ public final class GuavaProcessIoUsage {
 
 }
 ```
-[Source](src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
+[Source](../src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
