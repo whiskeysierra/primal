@@ -1,5 +1,8 @@
-# TODOs
-
+## TODO
+- `ByteSource ManagedProcess.read()`?
+  - Specify, that ProcessService works in memory on the stream
+- custom `Exception` type?
+  - `ProcessException extends RuntimeException`?
 - command vs. executable
 - test suite
 - cross platform testing

@@ -1,5 +1,7 @@
 package org.whiskeysierra.process;
 
+import com.google.common.io.ByteSource;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Map;
@@ -34,5 +36,7 @@ public interface ManagedProcess {
     ManagedProcess allow(int... exitValues);
 
     RunningProcess call() throws IOException;
+
+    ByteSource read() throws IOException;
 
 }

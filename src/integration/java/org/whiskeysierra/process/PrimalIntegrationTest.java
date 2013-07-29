@@ -38,7 +38,7 @@ public final class PrimalIntegrationTest {
     public void readExecutableUnix() throws IOException {
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.UNIX));
 
-        final String output = Primal.read(unix, "Hello", "World");
+        final String output = Primal.toString(unix, "Hello", "World");
         assertThat(output, equalTo("Hello\nWorld\n"));
     }
 
@@ -46,13 +46,13 @@ public final class PrimalIntegrationTest {
     public void readExecutableWindows() throws IOException {
         assumeThat(Os.getCurrent().getFamilies(), hasItem(Family.WINDOWS));
 
-        final String output = Primal.read(windows, "Hello", "World");
+        final String output = Primal.toString(windows, "Hello", "World");
         assertThat(output, equalTo("Hello\nWorld\n"));
     }
 
     @Test
     public void readCommand() throws IOException {
-        String output = Primal.read("echo", "Hello", "World");
+        String output = Primal.toString("echo", "Hello", "World");
         assertThat(output, equalTo("Hello World\n"));
     }
 
