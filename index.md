@@ -6,7 +6,7 @@ description: "A Process Management Library for Java"
 tags: [java, process api]
 image:
   feature: texture-feature-01.jpg
-version: 1.2.3
+version: 0.2.0
 ---
 
 <section id="table-of-contents" class="toc">
@@ -44,12 +44,10 @@ The goal of this library is to provide a usable API to be used as an alternative
 
 ## Installation
 
-Replace `${primal.version}` with the appropriate current release.
-
 ### Gradle
 
 {% highlight groovy %}
-compile 'org.whiskeysierra.process:primal:${primal.version}'
+compile 'org.whiskeysierra.process:primal:{{ page.version }}'
 {% endhighlight %}
 
 ### Maven
@@ -58,28 +56,28 @@ compile 'org.whiskeysierra.process:primal:${primal.version}'
 <dependency>
     <groupId>org.wiskeysierra.process</groupId>
     <artifactId>primal</artifactId>
-    <version>${primal.version}</version>
+    <version>{{ page.version }}</version>
 </dependency>
 {% endhighlight %}
 
 ### Ivy
 {% highlight xml %}
-<dependency org="org.whiskeysierra.process" name="primal" rev="${primal.version}"/>
+<dependency org="org.whiskeysierra.process" name="primal" rev="{{ page.version }}"/>
 {% endhighlight %}
 
 ### Buildr
 {% highlight ruby %}
-compile.with 'org.whiskeysierra.process:primal:jar:${primal.version}'
+compile.with 'org.whiskeysierra.process:primal:jar:{{ page.version }}'
 {% endhighlight %}
 
 ### SBT
 {% highlight scala %}
-libraryDependencies += "org.whiskeysierra.process" % "primal" % "${primal.version}"
+libraryDependencies += "org.whiskeysierra.process" % "primal" % "{{ page.version }}"
 {% endhighlight %}
 
 ### Leiningen
 {% highlight clojure %}
-:dependencies [[org.whiskeysierra.process/primal "${primal.version}"]]
+:dependencies [[org.whiskeysierra.process/primal "{{ page.version }}"]]
 {% endhighlight %}
 
 ### Standalone Jar file
