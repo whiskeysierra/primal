@@ -7,8 +7,20 @@
 
 The [Java Process API](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) has been around
 for a while now, and even though it had received some significant updates in the past major releases
-of the platform ([ProcessBuilder](http://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html)),
-there are still plenty of possibilities to shoot yourself in the foot:
+of the platform, there are still plenty of possibilities to shoot yourself in the foot. For more details
+read the section about [Issues with the Process API](#issueswiththeprocessapi).
+
+The goal of this library is to provide a usable API to be used as an alternative to
+[`Process`](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) and
+[`ProcessBuilder`](http://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html) which
+
+1. works around the issues with Process API
+2. provide a set of useful [Features](#features)
+
+## Table of Contents
+!TOC
+
+## Issues with the Process API
 
 1. [`Process.waitFor()`](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#waitFor\(\)) throws an
 [`InterruptedException`](http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html) but
@@ -20,8 +32,10 @@ process will block or even end up in a deadlock.
 
 Interesting articles on the topic can be found [here][javaworld] and [here][cnblogs].
 
-## Table of Contents
-!TOC
+## Features
+
+1. Interface-based API
+2. Efficient and cross-platform stream gobbling
 
 ## Requirements
 

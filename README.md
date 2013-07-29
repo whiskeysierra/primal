@@ -7,8 +7,45 @@
 
 The [Java Process API](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) has been around
 for a while now, and even though it had received some significant updates in the past major releases
-of the platform ([ProcessBuilder](http://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html)),
-there are still plenty of possibilities to shoot yourself in the foot:
+of the platform, there are still plenty of possibilities to shoot yourself in the foot. For more details
+read the section about [Issues with the Process API](#issueswiththeprocessapi).
+
+The goal of this library is to provide a usable API to be used as an alternative to
+[`Process`](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) and
+[`ProcessBuilder`](http://docs.oracle.com/javase/7/docs/api/java/lang/ProcessBuilder.html) which
+
+1. works around the issues with Process API
+2. provide a set of useful [Features](#features)
+
+## Table of Contents
+1\.  [Issues with the Process API](#issueswiththeprocessapi)  
+2\.  [Features](#features)  
+3\.  [Requirements](#requirements)  
+4\.  [Installation](#installation)  
+4.1\.  [Gradle](#gradle)  
+4.2\.  [Maven](#maven)  
+4.3\.  [Ivy](#ivy)  
+4.4\.  [Buildr](#buildr)  
+4.5\.  [SBT](#sbt)  
+4.6\.  [Leiningen](#leiningen)  
+4.7\.  [Standalone Jar file](#standalonejarfile)  
+5\.  [Usage](#usage)  
+5.1\.  [Basic Usage](#basicusage)  
+5.2\.  [Advanced Usage](#advancedusage)  
+5.2.1\.  [Stream redirection](#streamredirection)  
+5.2.2\.  [Process IO](#processio)  
+6\.  [Design Goals](#designgoals)  
+6.1\.  [Mockability](#mockability)  
+6.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
+6.2.1\.  [Guice or Dagger](#guiceordagger)  
+7\.  [To do](#todo)  
+8\.  [References](#references)  
+9\.  [Boring legal stuff](#boringlegalstuff)  
+10\.  [Attributions](#attributions)  
+
+<a name="issueswiththeprocessapi"></a>
+
+## 1\. Issues with the Process API
 
 1. [`Process.waitFor()`](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#waitFor\(\)) throws an
 [`InterruptedException`](http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html) but
@@ -20,51 +57,34 @@ process will block or even end up in a deadlock.
 
 Interesting articles on the topic can be found [here][javaworld] and [here][cnblogs].
 
-## Table of Contents
-1\.  [Requirements](#requirements)  
-2\.  [Installation](#installation)  
-2.1\.  [Gradle](#gradle)  
-2.2\.  [Maven](#maven)  
-2.3\.  [Ivy](#ivy)  
-2.4\.  [Buildr](#buildr)  
-2.5\.  [SBT](#sbt)  
-2.6\.  [Leiningen](#leiningen)  
-2.7\.  [Standalone Jar file](#standalonejarfile)  
-3\.  [Usage](#usage)  
-3.1\.  [Basic Usage](#basicusage)  
-3.2\.  [Advanced Usage](#advancedusage)  
-3.2.1\.  [Stream redirection](#streamredirection)  
-3.2.2\.  [Process IO](#processio)  
-4\.  [Design Goals](#designgoals)  
-4.1\.  [Mockability](#mockability)  
-4.2\.  [Support for Dependency Injection](#supportfordependencyinjection)  
-4.2.1\.  [Guice or Dagger](#guiceordagger)  
-5\.  [To do](#todo)  
-6\.  [References](#references)  
-7\.  [Boring legal stuff](#boringlegalstuff)  
-8\.  [Attributions](#attributions)  
+<a name="features"></a>
+
+## 2\. Features
+
+1. Interface-based API
+2. Efficient and cross-platform stream gobbling
 
 <a name="requirements"></a>
 
-## 1\. Requirements
+## 3\. Requirements
 
 - Java 1.7 or higher
 - [Guava][guava] 14.x
 
 <a name="installation"></a>
 
-## 2\. Installation
+## 4\. Installation
 
 <a name="gradle"></a>
 
-### 2.1\. Gradle
+### 4.1\. Gradle
 ```groovy
 compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 ```
 
 <a name="maven"></a>
 
-### 2.2\. Maven
+### 4.2\. Maven
 
 ```xml
 <dependency>
@@ -76,45 +96,45 @@ compile group: 'org.whiskeysierra.process', name: 'primal', version: '0.1.0'
 
 <a name="ivy"></a>
 
-### 2.3\. Ivy
+### 4.3\. Ivy
 ```xml
 <dependency org="org.whiskeysierra.process" name="primal" rev="0.1.0"/>
 ```
 
 <a name="buildr"></a>
 
-### 2.4\. Buildr
+### 4.4\. Buildr
 ```ruby
 compile.with 'org.whiskeysierra.process:primal:jar:0.1.0'
 ```
 
 <a name="sbt"></a>
 
-### 2.5\. SBT
+### 4.5\. SBT
 ```scala
 libraryDependencies += "org.whiskeysierra.process" % "primal" % "0.1.0"
 ```
 
 <a name="leiningen"></a>
 
-### 2.6\. Leiningen
+### 4.6\. Leiningen
 ```clojure
 :dependencies [[org.whiskeysierra.process/primal "0.1.0"]]
 ```
 
 <a name="standalonejarfile"></a>
 
-### 2.7\. Standalone Jar file
+### 4.7\. Standalone Jar file
 Just download the jar file [here](#) and add it to your classpath. You'll also need to download all
 libraries mentioned in the [Requirements sections](#requirements).
 
 <a name="usage"></a>
 
-## 3\. Usage
+## 5\. Usage
 
 <a name="basicusage"></a>
 
-### 3.1\. Basic Usage
+### 5.1\. Basic Usage
 Calling commands and executables, reading output as string, ...
 
 ```java
@@ -139,14 +159,14 @@ public final class BasicUsage {
 
 <a name="advancedusage"></a>
 
-### 3.2\. Advanced Usage
+### 5.2\. Advanced Usage
 Setting environment variables, changing working directory, specify allowed exit values
 
 [ConfigurationUsage.java](src/spec/java/org/whiskeysierra/process/ConfigurationUsage.java)
 
 <a name="streamredirection"></a>
 
-#### 3.2.1\. Stream redirection
+#### 5.2.1\. Stream redirection
 ```java
 package org.whiskeysierra.process;
 
@@ -179,7 +199,7 @@ public final class RedirectUsage {
 
 <a name="processio"></a>
 
-#### 3.2.2\. Process IO
+#### 5.2.2\. Process IO
 
 [JDK example](src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 
@@ -187,11 +207,11 @@ public final class RedirectUsage {
 
 <a name="designgoals"></a>
 
-## 4\. Design Goals
+## 6\. Design Goals
 
 <a name="mockability"></a>
 
-### 4.1\. Mockability
+### 6.1\. Mockability
 API is pure interface-based...
 
 [Mockito][mockito]
@@ -200,11 +220,11 @@ API is pure interface-based...
 
 <a name="supportfordependencyinjection"></a>
 
-### 4.2\. Support for Dependency Injection
+### 6.2\. Support for Dependency Injection
 
 <a name="guiceordagger"></a>
 
-#### 4.2.1\. [Guice][guice] or [Dagger][dagger]
+#### 6.2.1\. [Guice][guice] or [Dagger][dagger]
 
 Inside your [Module](http://google-guice.googlecode.com/git/javadoc/com/google/inject/Module.html) or
 [@Module](http://square.github.io/dagger/javadoc/dagger/Module.html) respectively:
@@ -218,7 +238,7 @@ public ProcessService provideProcessService() {
 
 <a name="todo"></a>
 
-## 5\. To do
+## 7\. To do
 - command vs. executable
 - test suite
 - cross platform testing
@@ -238,7 +258,7 @@ public ProcessService provideProcessService() {
 
 <a name="references"></a>
 
-## 6\. References
+## 8\. References
 *	[Guava][guava]
 *	[Guice][guice]
 *	[Dagger][dagger]
@@ -255,7 +275,7 @@ public ProcessService provideProcessService() {
 
 <a name="boringlegalstuff"></a>
 
-## 7\. Boring legal stuff
+## 9\. Boring legal stuff
 
 The MIT License (MIT)
 
@@ -280,6 +300,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 <a name="attributions"></a>
 
-## 8\. Attributions
+## 10\. Attributions
 Caveman Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Caveman-rock-2-icon.html) 
 is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/)
