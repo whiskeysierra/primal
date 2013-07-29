@@ -44,12 +44,12 @@ The goal of this library is to provide a usable API to be used as an alternative
 
 ## Installation
 
-Replace `${dagger.version}` with the appropriate current release.
+Replace `${primal.version}` with the appropriate current release.
 
 ### Gradle
 
 {% highlight groovy %}
-compile 'org.whiskeysierra.process:primal:${dagger.version}'
+compile 'org.whiskeysierra.process:primal:${primal.version}'
 {% endhighlight %}
 
 ### Maven
@@ -58,28 +58,28 @@ compile 'org.whiskeysierra.process:primal:${dagger.version}'
 <dependency>
     <groupId>org.wiskeysierra.process</groupId>
     <artifactId>primal</artifactId>
-    <version>${dagger.version}</version>
+    <version>${primal.version}</version>
 </dependency>
 {% endhighlight %}
 
 ### Ivy
 {% highlight xml %}
-<dependency org="org.whiskeysierra.process" name="primal" rev="${dagger.version}"/>
+<dependency org="org.whiskeysierra.process" name="primal" rev="${primal.version}"/>
 {% endhighlight %}
 
 ### Buildr
 {% highlight ruby %}
-compile.with 'org.whiskeysierra.process:primal:jar:${dagger.version}'
+compile.with 'org.whiskeysierra.process:primal:jar:${primal.version}'
 {% endhighlight %}
 
 ### SBT
 {% highlight scala %}
-libraryDependencies += "org.whiskeysierra.process" % "primal" % "${dagger.version}"
+libraryDependencies += "org.whiskeysierra.process" % "primal" % "${primal.version}"
 {% endhighlight %}
 
 ### Leiningen
 {% highlight clojure %}
-:dependencies [[org.whiskeysierra.process/primal "${dagger.version}"]]
+:dependencies [[org.whiskeysierra.process/primal "${primal.version}"]]
 {% endhighlight %}
 
 ### Standalone Jar file
