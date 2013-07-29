@@ -1,5 +1,5 @@
 [[Home]] <br/>
 [[Installation]] <br/>
 [[Usage]] <br/>
-[[Goals]] <br/>
+[[Design Goals]] <br/>
 [[Caveats]] <br/>

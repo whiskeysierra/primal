@@ -1,5 +1,3 @@
-## Usage
-
 ### Basic Usage
 Calling commands and executables, reading output as string, ...
 
