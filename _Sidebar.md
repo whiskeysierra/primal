@@ -1,1 +1,5 @@
+[[Home]]
+[[Installation]]
 [[Usage]]
+[[Goals]]
+[[Caveats]]
