@@ -37,12 +37,19 @@ The goal of this library is to provide a usable API to be used as an alternative
 1. works around the issues with Process API
 2. provide a set of useful [features](#features)
 
+## Requirements
+
+- Java 1.7 or higher
+- see [`build.gradle`](https://github.com/whiskeysierra/primal/blob/master/build.gradle#L30)
+
 ## Installation
+
+Replace `${dagger.version}` with the appropriate current release.
 
 ### Gradle
 
 {% highlight groovy %}
-compile 'org.whiskeysierra.process:primal:{{ page.version }}'
+compile 'org.whiskeysierra.process:primal:${dagger.version}'
 {% endhighlight %}
 
 ### Maven
@@ -51,28 +58,28 @@ compile 'org.whiskeysierra.process:primal:{{ page.version }}'
 <dependency>
     <groupId>org.wiskeysierra.process</groupId>
     <artifactId>primal</artifactId>
-    <version>0.2.0</version>
+    <version>${dagger.version}</version>
 </dependency>
 {% endhighlight %}
 
 ### Ivy
 {% highlight xml %}
-<dependency org="org.whiskeysierra.process" name="primal" rev="0.2.0"/>
+<dependency org="org.whiskeysierra.process" name="primal" rev="${dagger.version}"/>
 {% endhighlight %}
 
 ### Buildr
 {% highlight ruby %}
-compile.with 'org.whiskeysierra.process:primal:jar:0.2.0'
+compile.with 'org.whiskeysierra.process:primal:jar:${dagger.version}'
 {% endhighlight %}
 
 ### SBT
 {% highlight scala %}
-libraryDependencies += "org.whiskeysierra.process" % "primal" % "0.2.0"
+libraryDependencies += "org.whiskeysierra.process" % "primal" % "${dagger.version}"
 {% endhighlight %}
 
 ### Leiningen
 {% highlight clojure %}
-:dependencies [[org.whiskeysierra.process/primal "0.2.0"]]
+:dependencies [[org.whiskeysierra.process/primal "${dagger.version}"]]
 {% endhighlight %}
 
 ### Standalone Jar file
