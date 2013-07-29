@@ -1,4 +1,4 @@
-# Primal v{{ version }} [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
+# Primal [![Build Status](https://travis-ci.org/whiskeysierra/primal.png?branch=master)](http://travis-ci.org/whiskeysierra/primal)
 
 <img src="docs/icon.png" alt="Caveman icon" align="right"/>
 
