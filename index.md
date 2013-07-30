@@ -5,7 +5,7 @@ title: Primal
 description: "A Process Management Library for Java"
 tags: [java, process api]
 image:
-  feature: texture-feature-01.jpg
+  feature: texture-feature-02.jpg
 version: 0.1.0
 ---
 
@@ -23,7 +23,7 @@ version: 0.1.0
 
 <br/>
 
-<img src="images/icon.png" alt="Caveman icon" align="right"/>
+<img src="{{ site.url }}/images/icon.png" alt="Caveman icon" align="right"/>
 
 The [Java Process API](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) has been around
 for a while now, and even though it had received some significant updates in the past major releases
@@ -194,7 +194,11 @@ API is pure interface-based...
 ## Boring legal stuff
 {% include LICENSE %}
 
-{% include Attributions.md %}
+## Attributions
+Dino Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Dino-green-icon.html)
+is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/).
+The Bhimbetka Cave Paintings photo by [Raveesh Vyas](https://en.wikipedia.org/wiki/File:Bhimbetka_Cave_Paintings.jpg) is licensed under a
+[Creative Commons (Attribution-ShareAlike 2.0 Generic)](http://creativecommons.org/licenses/by-sa/2.0/).
 
 [guava]: https://code.google.com/p/guava-libraries/ "Guava"
 [guice]: https://code.google.com/p/google-guice/ "Guice"
