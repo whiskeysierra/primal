@@ -18,4 +18,4 @@ set +e
 git commit -m "Updated site to version $version" --no-verify
 set -e
 
-git subtree push --prefix site git@github.com:whiskeysierra/primal.git gh-pages
+git subtree push --prefix site origin gh-pages
