@@ -2,8 +2,7 @@
 
 set -e
 
-match=$(grep -E "^url:" site/_config.yml)
-if [ -z "$match" ]; then
+if [ -z "$(grep -E "^url:" site/_config.yml)" ]; then
     echo "Did you miss to set the url key in site/_config.yml?"
     exit 1
 fi
@@ -14,5 +13,9 @@ sed -E -i.tmp "s/^version: .*$/version: $version/g" site/index.md
 rm site/index.md.tmp
 
 git add site/index.md
-git commit -m "Updated site to version $version" --no-verify ||
+
+set +e
+git commit -m "Updated site to version $version" --no-verify
+set -e
+
 git subtree push --prefix site git@github.com:whiskeysierra/primal.git gh-pages
