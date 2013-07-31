@@ -2,7 +2,7 @@ title:            whiskeysierra.github.io/primal
 tagline:          A short tagline
 description:      Describe your website.
 #Comment out url when working locally to resolve base urls correctly
-url:              http://whiskeysierra.github.io/primal
+#url:              http://whiskeysierra.github.io/primal
 
 # Owner/author information
 owner:
@@ -29,7 +29,11 @@ bing_verify:
 
 # Links to include in top navigation
 # For external links add external: true
-links: ~
+links:
+    - title: Home
+      url: /
+    - title: Pitfalls
+      url: /pitfalls
 
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone:    Europe/Berlin
