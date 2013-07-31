@@ -21,6 +21,8 @@ version: 0.2.0
 
 ### A **Pr**ocess **Ma**nagement **L**ibrary for the Java Platform
 
+<a href="http://travis-ci.org/whiskeysierra/primal"><img src="https://travis-ci.org/whiskeysierra/primal.png?branch=master" alt="Build status"></a>
+
 <br/>
 
 <img src="{{ site.url }}/images/icon.png" alt="Caveman icon" align="right"/>
@@ -28,7 +30,7 @@ version: 0.2.0
 The [Java Process API](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) has been around
 for a while now, and even though it had received some significant updates in the past major releases
 of the platform, there are still plenty of possibilities to shoot yourself in the foot. For more details
-read the section about [Issues with the Process API](#issues-with-the-process-api).
+see [Pitfalls]({{ site.url }}/pitfalls).
 
 The goal of this library is to provide a usable API to be used as an alternative to
 [`Process`](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html) and
@@ -40,7 +42,7 @@ The goal of this library is to provide a usable API to be used as an alternative
 ## Requirements
 
 - Java 1.7 or higher
-- see [`build.gradle`](https://github.com/whiskeysierra/primal/blob/master/build.gradle#L30)
+- see [`build.gradle`](https://github.com/whiskeysierra/primal/blob/master/build.gradle#L29)
 
 ## Installation
 
@@ -151,18 +153,6 @@ try (RunningProcess process = managed.call()) {
 [JDK example](https://github.com/whiskeysierra/primal/blob/master/src/spec/java/org/whiskeysierra/process/JdkProcessIoUsage.java)
 [Guava example](https://github.com/whiskeysierra/primal/blob/master/src/spec/java/org/whiskeysierra/process/GuavaProcessIoUsage.java)
 
-## Issues with the Process API
-
-1. [`Process.waitFor()`](http://docs.oracle.com/javase/7/docs/api/java/lang/Process.html#waitFor\(\)) throws an
-[`InterruptedException`](http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html) but
-fails to call [`Thread.interrupted()`](http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#interrupted\(\))
-which leads to subsequent `InterruptedException`s as long as the interrupted bit of the current thread is
-not reset.
-2. The associated output streams of a process, i.e. `stdout` and  `stderr`, must be promptly consumed or the
-process will block or even end up in a deadlock.
-
-Interesting articles on the topic can be found [here][javaworld] and [here][cnblogs].
-
 ## Features
 
 1. Interface-based API
@@ -194,12 +184,7 @@ API is pure interface-based...
 ## Boring legal stuff
 {% include LICENSE %}
 
-## Attributions
-Dino Icon by [Fast Icon](http://www.iconarchive.com/show/dino-icons-by-fasticon/Dino-green-icon.html)
-is licensed as Linkware: [Icons by: Fast Icon.com](http://www.fasticon.com/).
-The [Bhimbetka Cave Paintings](https://commons.wikimedia.org/wiki/File:Bhimbetka_Cave_Paintings.jpg#) photo by
-[Raveesh Vyas](http://www.flickr.com/photos/32392356@N04) is licensed under a
-[Creative Commons (Attribution-ShareAlike 2.0 Generic)](http://creativecommons.org/licenses/by-sa/2.0/).
+{% include attributions.md %}
 
 [guava]: https://code.google.com/p/guava-libraries/ "Guava"
 [guice]: https://code.google.com/p/google-guice/ "Guice"
