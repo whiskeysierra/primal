@@ -6,7 +6,7 @@ description: "A Process Management Library for Java"
 tags: [java, process api]
 image:
   feature: texture-feature-02.jpg
-version: 0.2.0
+version: 0.1.0
 ---
 
 <section id="table-of-contents" class="toc">
