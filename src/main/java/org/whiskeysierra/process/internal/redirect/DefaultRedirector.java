@@ -2,8 +2,8 @@ package org.whiskeysierra.process.internal.redirect;
 
 import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.collect.Maps;
-import org.whiskeysierra.process.Family;
-import org.whiskeysierra.process.Os;
+import org.whiskeysierra.process.internal.os.Family;
+import org.whiskeysierra.process.internal.os.Os;
 import org.whiskeysierra.process.Redirection;
 import org.whiskeysierra.process.Stream;
 import org.whiskeysierra.process.spi.Redirector;

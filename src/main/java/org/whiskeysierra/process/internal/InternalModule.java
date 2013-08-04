@@ -2,7 +2,7 @@ package org.whiskeysierra.process.internal;
 
 import dagger.Module;
 import dagger.Provides;
-import org.whiskeysierra.process.Os;
+import org.whiskeysierra.process.internal.os.Os;
 import org.whiskeysierra.process.ProcessService;
 import org.whiskeysierra.process.internal.escape.EscapeModule;
 import org.whiskeysierra.process.internal.execute.ExecuteModule;

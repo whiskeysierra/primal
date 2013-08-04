@@ -4,6 +4,8 @@ import com.google.common.io.Files;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.whiskeysierra.process.internal.os.Family;
+import org.whiskeysierra.process.internal.os.Os;
 
 import java.io.File;
 import java.io.IOException;

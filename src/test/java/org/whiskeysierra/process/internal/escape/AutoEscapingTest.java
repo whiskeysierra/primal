@@ -2,8 +2,8 @@ package org.whiskeysierra.process.internal.escape;
 
 import com.google.common.base.Joiner;
 import org.junit.Test;
-import org.whiskeysierra.process.Family;
-import org.whiskeysierra.process.Os;
+import org.whiskeysierra.process.internal.os.Family;
+import org.whiskeysierra.process.internal.os.Os;
 import org.whiskeysierra.process.Primal;
 
 import java.io.IOException;

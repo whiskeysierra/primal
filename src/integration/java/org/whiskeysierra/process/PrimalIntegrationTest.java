@@ -1,6 +1,8 @@
 package org.whiskeysierra.process;
 
 import org.junit.Test;
+import org.whiskeysierra.process.internal.os.Family;
+import org.whiskeysierra.process.internal.os.Os;
 
 import java.io.IOException;
 import java.nio.file.Path;

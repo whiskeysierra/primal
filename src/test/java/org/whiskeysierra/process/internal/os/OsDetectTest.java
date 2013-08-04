@@ -1,4 +1,4 @@
-package org.whiskeysierra.process;
+package org.whiskeysierra.process.internal.os;
 
 import com.google.common.collect.Maps;
 import org.junit.Test;
