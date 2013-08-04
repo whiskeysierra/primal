@@ -7,6 +7,7 @@ import org.whiskeysierra.process.ProcessService;
 import org.whiskeysierra.process.internal.escape.EscapeModule;
 import org.whiskeysierra.process.internal.execute.ExecuteModule;
 import org.whiskeysierra.process.internal.manage.ManageModule;
+import org.whiskeysierra.process.internal.os.OsModule;
 import org.whiskeysierra.process.internal.process.ProcessModule;
 import org.whiskeysierra.process.internal.redirect.RedirectModule;
 
@@ -19,6 +20,7 @@ import java.util.concurrent.Executor;
         EscapeModule.class,
         ExecuteModule.class,
         ManageModule.class,
+        OsModule.class,
         ProcessModule.class,
         RedirectModule.class
     }
@@ -45,12 +47,6 @@ public final class InternalModule {
     @Singleton
     public Executor provideExecutor() {
         return executor;
-    }
-
-    @Provides
-    @Singleton
-    public Os provideOs() {
-        return Os.getCurrent();
     }
 
 }
